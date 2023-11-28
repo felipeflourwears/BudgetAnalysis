@@ -371,17 +371,68 @@
                 for (var i = 1; i < currentBatch; i++) {
                     var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
 
-                    var dataDiv = $('<div></div>');
-                    dataDiv.text('Lote ' + i + ': ' + JSON.stringify(storedData));
-                    dataDisplay.append(dataDiv);
+                    if (storedData !== null) { // Verificar si storedData no es nulo
+                        var table = $('<table class="batch-table"></table>');
+
+                        // Crear la cabecera de la tabla
+                        var thead = $('<thead><tr><th colspan="4">Lote ' + i + '</th><th><button class="delete-batch-btn" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
+                        table.append(thead);
+
+                        var tbody = $('<tbody></tbody>');
+
+                        // Crear filas para cada elemento en el lote
+                        storedData.forEach(function(item) {
+                            var row = $('<tr></tr>');
+                            for (var key in item) {
+                                if (item.hasOwnProperty(key)) {
+                                    row.append('<td>' + key + '</td>');
+                                    row.append('<td>' + item[key] + '</td>');
+                                }
+                            }
+                            tbody.append(row);
+                        });
+
+                        table.append(tbody);
+                        dataDisplay.append(table);
+                    }
                 }
             }
+
+            // Función para eliminar un lote al hacer clic en el botón "Delete Batch"
+            $(document).on('click', '.delete-batch-btn', function() {
+                var batchNumber = $(this).data('batch');
+                var confirmation = confirm('¿Estás seguro de que quieres eliminar el lote ' + batchNumber + '?');
+
+                if (confirmation) {
+                    localStorage.removeItem('itemsData' + batchNumber);
+                    updateDataDisplay();
+                }
+            });
+
 
             $('#addToListBtn').click(function() {
                 var headerItems = $('.headers-container .row');
                 var shielfItems = $('.shielfs-container .row');
+                
+                //Prices
+                var video_procesor = 377.988;
+                var freight_import_taxes = 487.20;
+                var install = 931.02;
+                var cms = 152.1;
+                var noc = 720;
+                var totalFixed;
+
+                // Calcular la suma de los precios
+                totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
+
+                // Imprimir el resultado en la consola
+                console.log('El total por lote: ', totalFixed);
+
+
+ 
 
                 var currentBatchItems = []; // Array para el lote actual
+
 
                 headerItems.each(function() {
                     var headerSize = $(this).find('select[name="headerSize"]').val();
@@ -390,8 +441,7 @@
 
                     currentBatchItems.push({
                         type: 'Header',
-                        headerSize: headerSize,
-                        headerSizePi: headerSizePi,
+                        size: headerSizePi + ' ' + headerSize + ' ' + 'Header', // Combinar tipo y tamaño en el orden requerido
                         quantity: quantity
                     });
                 });
@@ -403,12 +453,10 @@
 
                     currentBatchItems.push({
                         type: 'Shielf',
-                        shielfSize: shielfSize,
-                        piShielf: piShielf,
+                        size: piShielf + ' ' + shielfSize + ' ' + 'Shielf', // Combinar tipo y tamaño en el orden requerido
                         quantity: quantity
                     });
                 });
-
                 // Guardar el lote actual en localStorage con una clave diferente para cada lote
                 localStorage.setItem('itemsData' + currentBatch, JSON.stringify(currentBatchItems));
                 console.log('Lote ' + currentBatch + ': ', currentBatchItems);
@@ -423,6 +471,58 @@
                 // Restablecer los campos de entrada en headers-container y shielfs-container
                 $('.headers-container').empty();
                 $('.shielfs-container').empty();
+
+
+                var preciosPorSeleccion = {
+                    'P2 120 Header': 1392.391,
+                    'P1.8 120 Header': 2086.5,
+                    'P1.5 120 Header': 2386.8,
+                    'P1.2 120 Header': 3110.276,
+
+                    'P2 90 Header': 1189.864,
+                    'P1.8 90 Header': 1431.3,
+                    'P1.5 90 Header': 1627.47,
+                    'P1.2 90 Header': 2386.956,
+
+                    'P2 60 Header': 848.9,
+                    'P1.8 60 Header': 1171.3,
+                    'P1.5 60 Header': 1232.4,
+                    'P1.2 60 Header': 1656.2,
+
+                    'P2 45 Header': 848.9,
+                    'P1.8 45 Header': 1171.3,
+                    'P1.5 45 Header': 1232.4,
+                    'P1.2 45 Header': 1656.2,
+
+                    'P1.8 120 Shielf': 640.9,
+                    'P1.57 120 Shielf': 672.1,
+                    'P1.2 120 Shielf': 861.9,
+
+                    'P1.8 90 Shielf': 456.3,
+                    'P1.57 90 Shielf': 533,
+                    'P1.2 90 Shielf': 655.2,
+
+                    'P1.8 60 Shielf': 362.7,
+                    'P1.57 60 Shielf': 440.7,
+                    'P1.2 60 Shielf': 487.5,
+
+                    'P1.8 45 Shielf': 555.1,
+                    'P1.57 45 Shielf': 617.5,
+                    'P1.2 45 Shielf': 679.9
+                };
+
+                 // Calcular el precio total por lote
+                var totalPricePerLote = totalFixed;
+                currentBatchItems.forEach(function(item) {
+                    var key = item.size;
+                    if (preciosPorSeleccion.hasOwnProperty(key)) {
+                        totalPricePerLote += preciosPorSeleccion[key] * item.quantity;
+                    }
+                });
+
+                console.log('El precio total por lote es: ' + totalPricePerLote);
+
+
             });
 
             // Mostrar los datos al cargar la página
