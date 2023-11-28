@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="TemplateMo">
 
-        <title>Landing Page</title>
+        <title>Budget PopAtelier</title>
 
         <!-- CSS FILES -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,7 +101,7 @@
             <h1>Budget Stands &nbsp;<i class="bi bi-archive-fill"></i></h1>
         </header>
 
-        <form action="budget-back.php" method="POST">
+        <form action="#" method="POST">
             <div class="main-wrapper">
                 <main>
                     <div class="container-fluid">
@@ -147,6 +147,7 @@
                     </div>
                 </main>
             </div>
+            <div id="dataDisplay">Lotes</div>
         </form>
 
 
@@ -356,26 +357,77 @@
 
 
         <script>
-            $(document).ready(function() {$('#addToListBtn').click(function() {
-                    var items = $('.headers-container .row'); // Obtener todos los grupos de inputs
-                    itemsData = []; // Limpiar datos anteriores
+           $(document).ready(function() {
+            var currentBatch = 1; // Inicializar el contador de lotes
 
-                    items.each(function(index) {
-                        var headerSize = $(this).find('select[name="headerSize"]').val();
-                        var headerSizePi = $(this).find('select[name="headerSizePi"]').val();
-                        var quantity = $(this).find('input[name="quantity"]').val();
+            function saveDataToStorage(data, batch) {
+                localStorage.setItem('itemsData' + batch, JSON.stringify(data));
+            }
 
-                        itemsData.push({
-                            id: index + 1,
-                            headerSize: headerSize,
-                            headerSizePi: headerSizePi,
-                            quantity: quantity
-                        });
+            function updateDataDisplay() {
+                var dataDisplay = $('#dataDisplay');
+                dataDisplay.empty(); // Limpiar el contenido actual
+
+                for (var i = 1; i < currentBatch; i++) {
+                    var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
+
+                    var dataDiv = $('<div></div>');
+                    dataDiv.text('Lote ' + i + ': ' + JSON.stringify(storedData));
+                    dataDisplay.append(dataDiv);
+                }
+            }
+
+            $('#addToListBtn').click(function() {
+                var headerItems = $('.headers-container .row');
+                var shielfItems = $('.shielfs-container .row');
+
+                var currentBatchItems = []; // Array para el lote actual
+
+                headerItems.each(function() {
+                    var headerSize = $(this).find('select[name="headerSize"]').val();
+                    var headerSizePi = $(this).find('select[name="headerSizePi"]').val();
+                    var quantity = $(this).find('input[name="quantity"]').val();
+
+                    currentBatchItems.push({
+                        type: 'Header',
+                        headerSize: headerSize,
+                        headerSizePi: headerSizePi,
+                        quantity: quantity
                     });
-
-                    console.log(itemsData); // Muestra los datos en la consola (puedes enviarlos al servidor o realizar otras operaciones aquí)
                 });
+
+                shielfItems.each(function() {
+                    var shielfSize = $(this).find('select[name="shielfSize"]').val();
+                    var piShielf = $(this).find('select[name="piShielf"]').val();
+                    var quantity = $(this).find('input[name="quantity"]').val();
+
+                    currentBatchItems.push({
+                        type: 'Shielf',
+                        shielfSize: shielfSize,
+                        piShielf: piShielf,
+                        quantity: quantity
+                    });
+                });
+
+                // Guardar el lote actual en localStorage con una clave diferente para cada lote
+                localStorage.setItem('itemsData' + currentBatch, JSON.stringify(currentBatchItems));
+                console.log('Lote ' + currentBatch + ': ', currentBatchItems);
+
+                currentBatch++; // Incrementar el contador para el próximo lote
+                updateDataDisplay(); // Actualizar la visualización de los datos
+
+
+                var headerItems = $('.headers-container .row');
+                var shielfItems = $('.shielfs-container .row');
+
+                // Restablecer los campos de entrada en headers-container y shielfs-container
+                $('.headers-container').empty();
+                $('.shielfs-container').empty();
             });
+
+            // Mostrar los datos al cargar la página
+            updateDataDisplay();
+        });
         </script>
 
 
