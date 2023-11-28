@@ -144,6 +144,7 @@
                         <br>
                         <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
                         <button type="submit" class="btn btn-primary">Budget</button>
+                        <button type="button" class="btn btn-primary">Download PDF</button>
                     </div>
                 </main>
             </div>
@@ -359,6 +360,16 @@
         <script>
            $(document).ready(function() {
             
+            //Prices
+            var video_procesor = 377.988;
+            var freight_import_taxes = 487.20;
+            var install = 931.02;
+            var cms = 152.1;
+            var noc = 720;
+            var totalFixed;
+
+            // Calcular la suma de los precios
+            totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
             
             var preciosPorSeleccion = {
                     'P2 120 Header': 1392.391,
@@ -408,6 +419,7 @@
             function updateDataDisplay() {
                 var dataDisplay = $('#dataDisplay');
                 dataDisplay.empty(); // Limpiar el contenido actual
+                var totalAllBatchesPrice = 0; // Inicializar el precio total de todos los lotes
 
                 for (var i = 1; i < currentBatch; i++) {
                     var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
@@ -427,8 +439,14 @@
                             }
                         });
 
+                        // Agregar el total fijo al precio total del lote actual
+                        totalPricePerBatch += totalFixed;
+
+                        // Actualizar el total de todos los lotes sumados
+                        totalAllBatchesPrice += totalPricePerBatch;
+
                         // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4">Precio total del lote ' + i + ': ' + totalPricePerBatch + '</td></tr>');
+                        var totalRow = $('<tr><td colspan="4">Price Batch(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</td></tr>');
                         table.append(totalRow);
 
                         // Crear la cabecera de la tabla
@@ -463,6 +481,9 @@
                         dataDisplay.append(table);
                     }
                 }
+                // Mostrar el precio total de todos los lotes sumados, incluyendo los totales fijos por lote
+                var totalAllBatchesRow = $('<div>Total de todos los lotes (incluyendo total fijo): ' + totalAllBatchesPrice + '</div>');
+                dataDisplay.append(totalAllBatchesRow);
             }
 
 
@@ -482,17 +503,6 @@
             $('#addToListBtn').click(function() {
                 var headerItems = $('.headers-container .row');
                 var shielfItems = $('.shielfs-container .row');
-                
-                //Prices
-                var video_procesor = 377.988;
-                var freight_import_taxes = 487.20;
-                var install = 931.02;
-                var cms = 152.1;
-                var noc = 720;
-                var totalFixed;
-
-                // Calcular la suma de los precios
-                totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
 
                 // Imprimir el resultado en la consola
                 console.log('El total por lote: ', totalFixed);
