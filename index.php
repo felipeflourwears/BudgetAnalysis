@@ -36,8 +36,8 @@
 
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-
-                <a href="#" class="navbar-brand mx-auto mx-lg-0"><img src="./images/pop.png" alt="Logo" class="logo"></a>
+                <h1 style="color: white">Budget PopAtelier</h1>
+                <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0"><img src="./images/pop.png" alt="Logo" class="logo"></a>
 
             </div>
         </nav>
