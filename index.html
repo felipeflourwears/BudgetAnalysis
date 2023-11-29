@@ -22,7 +22,10 @@
 
         <link href="./css/magnific-popup.css" rel="stylesheet">
 
+        <!--Main styles-->
         <link href="./css/templatemo-first-portfolio-style.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/index.css">
+
         <link rel="shortcut icon" href="./images/pop.png" type="image/x-icon">
     </head>
     
@@ -44,59 +47,6 @@
 
         <br><br> <br><br> <br><br>
 
-        <style>
-            .main-wrapper {
-            width: 100%; /* Agrega un ancho del 100% al contenedor del main */
-            }
-
-            main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-           /*  border: 2px solid red;
-            box-sizing: border-box; */
-            padding: 10px;
-            width: 100%; /* Agrega un ancho del 100% al main */
-            }
-
-            .table-container {
-            width: 100%; /* Agrega un ancho del 100% al contenedor de la tabla */
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            }
-
-            table {
-            font-size: 14px;
-            border-collapse: collapse;
-            margin: 0 auto;
-            border: 2px solid green;
-            box-sizing: border-box;
-            width: 100%;
-            }
-
-            th, td {
-            padding: 8px;
-            text-align: center;
-            }
-
-            th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            }
-            header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f2f2f2;
-            padding: 10px;
-            }
-
-            h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-            }
-        </style>
         <header>
             <h1>Budget Stands &nbsp;<i class="bi bi-archive-fill"></i></h1>
         </header>
@@ -129,8 +79,8 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <button type="button" id="addShielfBtn" class="btn btn-primary mr-2">Add Shielf</button>
-                                <button type="button" id="deleteShielfBtn" class="btn btn-danger">Delete Shielf</button>
+                                <button type="button" id="addShielfBtn" class="btn btn-primary mr-2">Add Shelf</button>
+                                <button type="button" id="deleteShielfBtn" class="btn btn-danger">Delete Shelf</button>
                             </div>
                         </div>
 
@@ -143,26 +93,11 @@
                         </div>
                         <br>
                         <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
-                        <button type="submit" class="btn btn-primary">Budget</button>
-                        <button type="button" class="btn btn-primary" id="downloadPDFBtn">Download PDF</button>
-                        <button class=" btn btn-generar-pdf" type="button" id="btn-generar" value="Generar PDF" onclick="generarPDF(event)">Generar PDF</button>
-
-                        <script>
-                        function generatePDF() {
-                            const doc = new jsPDF({
-                            orientation: "landscape",
-                            unit: "in",
-                            format: [4, 2]
-                            });
-
-                            doc.text("Hello world!", 1, 1);
-                            doc.save("two-by-four.pdf");
-                        }
-                        </script>
-                        
+                        <button class=" btn btn-generar-pdf btn-success" type="button" id="btn-generar" value="Generar PDF" onclick="generarPDF(event)">Generate PDF</button>
                     </div>
                 </main>
             </div>
+            <div id="totalPriceDisplay"></div>
             <div id="dataDisplay">Lotes</div>
         </form>
 
@@ -431,6 +366,9 @@
             function updateDataDisplay() {
                 var dataDisplay = $('#dataDisplay');
                 dataDisplay.empty(); // Limpiar el contenido actual
+                var totalPriceDisplay = $('#totalPriceDisplay'); // Obtener el div para mostrar el precio total
+                totalPriceDisplay.empty();
+
                 var totalAllBatchesPrice = 0; // Inicializar el precio total de todos los lotes
 
                 for (var i = 1; i < currentBatch; i++) {
@@ -458,11 +396,11 @@
                         totalAllBatchesPrice += totalPricePerBatch;
 
                         // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4">Price Batch(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</td></tr>');
+                        var totalRow = $('<tr><td colspan="4">Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</td></tr>');
                         table.append(totalRow);
 
                         // Crear la cabecera de la tabla
-                        var thead = $('<thead><tr><th colspan="5">Lote ' + i + '</th><th><button class="delete-batch-btn" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
+                        var thead = $('<thead><tr><th colspan="5">KIT ' + i + '</th><th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
                         table.append(thead);
 
                         var tbody = $('<tbody></tbody>');
@@ -472,7 +410,7 @@
                             var row = $('<tr></tr>');
                             for (var key in item) {
                                 if (item.hasOwnProperty(key)) {
-                                    row.append('<td>' + key + '</td>');
+                                    row.append('<td><strong>' + key + '</strong></td>');
                                     row.append('<td>' + item[key] + '</td>');
                                 }
                             }
@@ -482,8 +420,8 @@
                             if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
                                 var pricePerItem = preciosPorSeleccion[itemKey];
                                 var totalForItem = pricePerItem * item.quantity;
-                                row.append('<td>Precio por artículo: ' + pricePerItem + '</td>');
-                                row.append('<td>Precio total: ' + totalForItem + '</td>');
+                                row.append('<td>Price per item: ' + pricePerItem + '</td>');
+                                row.append('<td>Total price: ' + totalForItem + '</td>');
                             }
 
                             tbody.append(row);
@@ -493,9 +431,14 @@
                         dataDisplay.append(table);
                     }
                 }
-                // Mostrar el precio total de todos los lotes sumados, incluyendo los totales fijos por lote
-                var totalAllBatchesRow = $('<div>Total de todos los lotes (incluyendo total fijo): ' + totalAllBatchesPrice + '</div>');
-                dataDisplay.append(totalAllBatchesRow);
+                var totalAllBatchesRow = $('<div>Total price for KITs: ' + totalAllBatchesPrice + ' MXN</div>');
+                totalAllBatchesRow.css({
+                'font-weight': 'bold',
+                'font-size': '1.2em',
+                'color': 'black' // Cambia el color a tu preferencia
+                });
+                totalPriceDisplay.append(totalAllBatchesRow);
+
             }
 
 
@@ -503,7 +446,7 @@
             // Función para eliminar un lote al hacer clic en el botón "Delete Batch"
             $(document).on('click', '.delete-batch-btn', function() {
                 var batchNumber = $(this).data('batch');
-                var confirmation = confirm('¿Estás seguro de que quieres eliminar el lote ' + batchNumber + '?');
+                var confirmation = confirm('Are you sure delete this batch ' + batchNumber + '?');
 
                 if (confirmation) {
                     localStorage.removeItem('itemsData' + batchNumber);
@@ -531,17 +474,17 @@
                     // Almacenar el artículo en la estructura de datos itemsByTypeAndSize
                     if (!itemsByTypeAndSize[key]) {
                         itemsByTypeAndSize[key] = {
-                            type: 'Header',
-                            size: key,
-                            quantity: 0
+                            Type: 'Header',
+                            Size: key,
+                            Quantity: 0
                         };
                     }
                     itemsByTypeAndSize[key].quantity += parseInt(quantity); // Actualizar la cantidad
 
                     currentBatchItems.push({
-                        type: 'Header',
-                        size: key,
-                        quantity: quantity
+                        Type: 'Header',
+                        Size: key,
+                        Quantity: quantity
                     });
                 });
 
@@ -554,17 +497,17 @@
                     // Almacenar el artículo en la estructura de datos itemsByTypeAndSize
                     if (!itemsByTypeAndSize[key]) {
                         itemsByTypeAndSize[key] = {
-                            type: 'Shielf',
-                            size: key,
-                            quantity: 0
+                            Type: 'Shielf',
+                            Size: key,
+                            Quantity: 0
                         };
                     }
                     itemsByTypeAndSize[key].quantity += parseInt(quantity); // Actualizar la cantidad
 
                     currentBatchItems.push({
-                        type: 'Shielf',
-                        size: key,
-                        quantity: quantity
+                        Type: 'Shielf',
+                        Size: key,
+                        Quantity: quantity
                     });
                 });
 
