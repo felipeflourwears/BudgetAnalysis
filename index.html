@@ -144,7 +144,22 @@
                         <br>
                         <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
                         <button type="submit" class="btn btn-primary">Budget</button>
-                        <button type="button" class="btn btn-primary">Download PDF</button>
+                        <button type="button" class="btn btn-primary" id="downloadPDFBtn">Download PDF</button>
+                        <button class=" btn btn-generar-pdf" type="button" id="btn-generar" value="Generar PDF" onclick="generarPDF(event)">Generar PDF</button>
+
+                        <script>
+                        function generatePDF() {
+                            const doc = new jsPDF({
+                            orientation: "landscape",
+                            unit: "in",
+                            format: [4, 2]
+                            });
+
+                            doc.text("Hello world!", 1, 1);
+                            doc.save("two-by-four.pdf");
+                        }
+                        </script>
+                        
                     </div>
                 </main>
             </div>
@@ -262,6 +277,56 @@
         </script>
 
         <script>
+        var currentBatch = 1; // Inicializar el contador de lotes
+        var preciosPorSeleccion = {
+            'P2 120 Header': 1392.391,
+            'P1.8 120 Header': 2086.5,
+            'P1.5 120 Header': 2386.8,
+            'P1.2 120 Header': 3110.276,
+
+            'P2 90 Header': 1189.864,
+            'P1.8 90 Header': 1431.3,
+            'P1.5 90 Header': 1627.47,
+            'P1.2 90 Header': 2386.956,
+
+            'P2 60 Header': 848.9,
+            'P1.8 60 Header': 1171.3,
+            'P1.5 60 Header': 1232.4,
+            'P1.2 60 Header': 1656.2,
+
+            'P2 45 Header': 848.9,
+            'P1.8 45 Header': 1171.3,
+            'P1.5 45 Header': 1232.4,
+            'P1.2 45 Header': 1656.2,
+
+            'P1.8 120 Shielf': 640.9,
+            'P1.57 120 Shielf': 672.1,
+            'P1.2 120 Shielf': 861.9,
+
+            'P1.8 90 Shielf': 456.3,
+            'P1.57 90 Shielf': 533,
+            'P1.2 90 Shielf': 655.2,
+
+            'P1.8 60 Shielf': 362.7,
+            'P1.57 60 Shielf': 440.7,
+            'P1.2 60 Shielf': 487.5,
+
+            'P1.8 45 Shielf': 555.1,
+            'P1.57 45 Shielf': 617.5,
+            'P1.2 45 Shielf': 679.9
+        };
+
+        //Prices
+        var video_procesor = 377.988;
+        var freight_import_taxes = 487.20;
+        var install = 931.02;
+        var cms = 152.1;
+        var noc = 720;
+        var totalFixed;
+
+        // Calcular la suma de los precios
+        totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
+
         $(document).ready(function() {
             $('#addShielfBtn').click(function() {
                 var newShielf = `
@@ -359,59 +424,6 @@
 
         <script>
            $(document).ready(function() {
-            
-            //Prices
-            var video_procesor = 377.988;
-            var freight_import_taxes = 487.20;
-            var install = 931.02;
-            var cms = 152.1;
-            var noc = 720;
-            var totalFixed;
-
-            // Calcular la suma de los precios
-            totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
-            
-            var preciosPorSeleccion = {
-                    'P2 120 Header': 1392.391,
-                    'P1.8 120 Header': 2086.5,
-                    'P1.5 120 Header': 2386.8,
-                    'P1.2 120 Header': 3110.276,
-
-                    'P2 90 Header': 1189.864,
-                    'P1.8 90 Header': 1431.3,
-                    'P1.5 90 Header': 1627.47,
-                    'P1.2 90 Header': 2386.956,
-
-                    'P2 60 Header': 848.9,
-                    'P1.8 60 Header': 1171.3,
-                    'P1.5 60 Header': 1232.4,
-                    'P1.2 60 Header': 1656.2,
-
-                    'P2 45 Header': 848.9,
-                    'P1.8 45 Header': 1171.3,
-                    'P1.5 45 Header': 1232.4,
-                    'P1.2 45 Header': 1656.2,
-
-                    'P1.8 120 Shielf': 640.9,
-                    'P1.57 120 Shielf': 672.1,
-                    'P1.2 120 Shielf': 861.9,
-
-                    'P1.8 90 Shielf': 456.3,
-                    'P1.57 90 Shielf': 533,
-                    'P1.2 90 Shielf': 655.2,
-
-                    'P1.8 60 Shielf': 362.7,
-                    'P1.57 60 Shielf': 440.7,
-                    'P1.2 60 Shielf': 487.5,
-
-                    'P1.8 45 Shielf': 555.1,
-                    'P1.57 45 Shielf': 617.5,
-                    'P1.2 45 Shielf': 679.9
-                };
-            
-            
-            var currentBatch = 1; // Inicializar el contador de lotes
-
             function saveDataToStorage(data, batch) {
                 localStorage.setItem('itemsData' + batch, JSON.stringify(data));
             }
@@ -600,9 +612,84 @@
         });
         </script>
 
+<script>
+  function generarPDF(event) {
+    event.preventDefault();
+
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    const logoImg = new Image();
+    logoImg.src = 'images/pop.png'; // Ruta de tu logo
+    logoImg.crossOrigin = 'Anonymous';
+
+    logoImg.onload = function() {
+        const logoWidth = 50;
+        const logoHeight = 50;
+        const pageWidth = 210;
+        const pageHeight = 297;
+
+        const startX = (pageWidth - logoWidth) / 2;
+        const startY = 10;
+
+        doc.addImage(this, 'PNG', startX, startY, logoWidth, logoHeight);
+
+        let y = 80; // Posición inicial en el eje Y después del logo
+
+        let totalAllBatchesPrice = 0; // Variable para almacenar el total de todos los lotes
+
+        for (let i = 1; i < currentBatch; i++) {
+            let storedData = JSON.parse(localStorage.getItem('itemsData' + i));
+
+            if (storedData !== null) {
+                storedData.forEach(function(item) {
+                    let row = [];
+                    for (let key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            row.push(item[key]);
+                        }
+                    }
+                    doc.text(10, y, row.join(', '));
+                    y += 10; // Incrementar la posición vertical para la siguiente fila
+                });
+
+                let totalPricePerBatch = 0;
+
+                storedData.forEach(function(item) {
+                    let itemKey = item.size;
+                    if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
+                        let pricePerItem = preciosPorSeleccion[itemKey];
+                        let totalForItem = pricePerItem * item.quantity;
+                        totalPricePerBatch += totalForItem;
+                    }
+                });
+
+                totalPricePerBatch += totalFixed;
+
+                doc.text(10, y + 10, `Precio total del lote ${i}: ${totalPricePerBatch}`);
+                y += 20; // Incrementar la posición vertical para el siguiente lote
+
+                totalAllBatchesPrice += totalPricePerBatch; // Agregar al total de todos los lotes
+            }
+        }
+
+        doc.text(10, y + 20, `Total de todos los lotes: ${totalAllBatchesPrice}`);
+        y += 30; // Incrementar la posición vertical para el siguiente elemento
+
+        doc.save('tablas-lotes.pdf');
+    };
+}
+
+</script>
+
+
 
 
         <!-- JAVASCRIPT FILES -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
         <script src="./js/jquery.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
         <script src="./js/jquery.sticky.js"></script>
