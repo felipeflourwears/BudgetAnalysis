@@ -613,7 +613,7 @@
         </script>
 
 <script>
-  function generarPDF(event) {
+function generarPDF(event) {
     event.preventDefault();
 
     const doc = new jsPDF({
@@ -654,6 +654,11 @@
                     }
                     doc.text(10, y, row.join(', '));
                     y += 10; // Incrementar la posición vertical para la siguiente fila
+
+                    if (y >= pageHeight - 10) { // Si alcanza el límite de la página
+                        doc.addPage(); // Agregar una nueva página
+                        y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                    }
                 });
 
                 let totalPricePerBatch = 0;
@@ -673,6 +678,11 @@
                 y += 20; // Incrementar la posición vertical para el siguiente lote
 
                 totalAllBatchesPrice += totalPricePerBatch; // Agregar al total de todos los lotes
+
+                if (y >= pageHeight - 20) { // Si alcanza el límite de la página
+                    doc.addPage(); // Agregar una nueva página
+                    y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                }
             }
         }
 
