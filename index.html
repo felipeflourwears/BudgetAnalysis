@@ -168,7 +168,7 @@
                             </div>
                             <div class="col-6 col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Select your PI shielf:</label>
+                                    <label class="bmd-label-floating">Select your PI shelf:</label>
                                     <div class="input-group">
                                         <select class="form-control" name="headerSizePi">
                                             <option value="P2">P2</option>
@@ -234,21 +234,21 @@
             'P1.5 45 Header': 1232.4,
             'P1.2 45 Header': 1656.2,
 
-            'P1.8 120 Shielf': 640.9,
-            'P1.57 120 Shielf': 672.1,
-            'P1.2 120 Shielf': 861.9,
+            'P1.8 120 Shelf': 640.9,
+            'P1.57 120 Shelf': 672.1,
+            'P1.2 120 Shelf': 861.9,
 
-            'P1.8 90 Shielf': 456.3,
-            'P1.57 90 Shielf': 533,
-            'P1.2 90 Shielf': 655.2,
+            'P1.8 90 Shelf': 456.3,
+            'P1.57 90 Shelf': 533,
+            'P1.2 90 Shelf': 655.2,
 
-            'P1.8 60 Shielf': 362.7,
-            'P1.57 60 Shielf': 440.7,
-            'P1.2 60 Shielf': 487.5,
+            'P1.8 60 Shelf': 362.7,
+            'P1.57 60 Shelf': 440.7,
+            'P1.2 60 Shelf': 487.5,
 
-            'P1.8 45 Shielf': 555.1,
-            'P1.57 45 Shielf': 617.5,
-            'P1.2 45 Shielf': 679.9
+            'P1.8 45 Shelf': 555.1,
+            'P1.57 45 Shelf': 617.5,
+            'P1.2 45 Shelf': 679.9
         };
 
         //Prices
@@ -262,13 +262,29 @@
         // Calcular la suma de los precios
         totalFixed = video_procesor + freight_import_taxes + install + cms + noc;
 
+        function calcularDescuentoPorLotes(cantidadLotes) {
+                if (cantidadLotes >= 150 && cantidadLotes <= 500) {
+                    return 0.0; // Sin descuento
+                } else if (cantidadLotes >= 501 && cantidadLotes <= 1000) {
+                    return 0.02; // Descuento del 2%
+                } else if (cantidadLotes >= 1001 && cantidadLotes <= 2000) {
+                    return 0.035; // Descuento del 3.5%
+                } else if (cantidadLotes >= 2001 && cantidadLotes <= 3000) {
+                    return 0.05; // Descuento del 5%
+                } else if (cantidadLotes > 3000) {
+                    return 0.075; // Descuento del 7.5%
+                } else {
+                    return 0; // Sin descuento
+                }
+        }
+
         $(document).ready(function() {
             $('#addShielfBtn').click(function() {
                 var newShielf = `
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Shielf size:</label>
+                                <label class="bmd-label-floating">Shelf size:</label>
                                 <select class="form-control shielf-size" name="shielfSize">
                                     <option value="120">120</option>
                                     <option value="90">90</option>
@@ -279,7 +295,7 @@
                         </div>
                         <div class="col-6 col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Select your PI shielf:</label>
+                                <label class="bmd-label-floating">Select your PI shelf:</label>
                                 <div class="input-group">
                                     <select class="form-control pi-shielf" name="piShielf">
                                         <option value="P1.8">P1.8</option>
@@ -370,9 +386,11 @@
                 totalPriceDisplay.empty();
 
                 var totalAllBatchesPrice = 0; // Inicializar el precio total de todos los lotes
+                var cantidadLotes = 0; // Inicializar la cantidad de lotes
 
                 for (var i = 1; i < currentBatch; i++) {
                     var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
+                    cantidadLotes++;
 
                     if (storedData !== null) { // Verificar si storedData no es nulo
                         var totalPricePerBatch = 0; // Inicializar el precio total del lote actual
@@ -436,13 +454,31 @@
                         dataDisplay.append(table);
                     }
                 }
-                var totalAllBatchesRow = $('<div>Total price for KITs: ' + totalAllBatchesPrice + ' MXN</div>');
-                totalAllBatchesRow.css({
-                'font-weight': 'bold',
-                'font-size': '1.2em',
-                'color': 'black' // Cambia el color a tu preferencia
+
+                // Calcular el descuento basado en la cantidad de lotes
+                var descuentoPorLotes = calcularDescuentoPorLotes(cantidadLotes);
+                var descuentoTotal = totalAllBatchesPrice * descuentoPorLotes;
+                var precioFinal = totalAllBatchesPrice - descuentoTotal;
+
+                // Mostrar el descuento aplicado
+                var descuentoRow = $('<div>Discount applied: ' + descuentoTotal.toFixed(2) + ' MXN</div>');
+                descuentoRow.css({
+                    'font-weight': 'bold',
+                    'font-size': '1.2em',
+                    'color': 'red' // Puedes cambiar el color según tu preferencia
                 });
-                totalPriceDisplay.append(totalAllBatchesRow);
+
+                totalPriceDisplay.append(descuentoRow);
+
+                // Mostrar el precio final después de aplicar el descuento
+                var precioFinalRow = $('<div>Final price after discount: ' + precioFinal.toFixed(2) + ' MXN</div>');
+                precioFinalRow.css({
+                    'font-weight': 'bold',
+                    'font-size': '1.2em',
+                    'color': 'black' // Puedes cambiar el color según tu preferencia
+                });
+
+                totalPriceDisplay.append(precioFinalRow);
 
             }
 
@@ -497,12 +533,12 @@
                     var shielfSize = $(this).find('select[name="shielfSize"]').val();
                     var piShielf = $(this).find('select[name="piShielf"]').val();
                     var quantity = $(this).find('input[name="quantity"]').val();
-                    var key = piShielf + ' ' + shielfSize + ' ' + 'Shielf'; // Generar clave de tipo y tamaño
+                    var key = piShielf + ' ' + shielfSize + ' ' + 'Shelf'; // Generar clave de tipo y tamaño
 
                     // Almacenar el artículo en la estructura de datos itemsByTypeAndSize
                     if (!itemsByTypeAndSize[key]) {
                         itemsByTypeAndSize[key] = {
-                            type: 'Shielf',
+                            type: 'Shelf',
                             size: key,
                             quantity: 0
                         };
@@ -510,7 +546,7 @@
                     itemsByTypeAndSize[key].quantity += parseInt(quantity); // Actualizar la cantidad
 
                     currentBatchItems.push({
-                        type: 'Shielf',
+                        type: 'Shelf',
                         size: key,
                         quantity: quantity
                     });
@@ -589,10 +625,11 @@ function generarPDF(event) {
         let y = 80; // Posición inicial en el eje Y después del logo
 
         let totalAllBatchesPrice = 0; // Variable para almacenar el total de todos los lotes
+        var cantidadLotes = 0; // Inicializar la cantidad de lotes
 
         for (let i = 1; i < currentBatch; i++) {
             let storedData = JSON.parse(localStorage.getItem('itemsData' + i));
-
+            cantidadLotes++;
             if (storedData !== null) {
                 let totalPricePerBatch = 0;
 
@@ -646,11 +683,19 @@ function generarPDF(event) {
             }
         }
 
+        // Calcular el descuento basado en el precio total de todos los lotes
+        var descuentoTotal = calcularDescuentoPorLotes(cantidadLotes);
+        doc.setFontSize(10);
+        doc.text(10, y + 10, `Lotes Totales: ${cantidadLotes}`);
+        doc.text(10, y + 15, `Descuento total: ${descuentoTotal.toFixed(2)*totalAllBatchesPrice}`);
+
         doc.setFontSize(10);
         doc.text(10, y + 20, `Total de todos los lotes: ${totalAllBatchesPrice.toFixed(2)}`);
         y += 30; // Incrementar la posición vertical para el siguiente elemento
+        doc.text(10, y + 20, `Precio final con descuento: ${totalAllBatchesPrice-descuentoTotal.toFixed(2)*totalAllBatchesPrice}`);
+        y += 30; // Incrementar la posición vertical para el siguiente elemento
 
-        doc.save('tablas-lotes.pdf');
+        doc.save('budget-popatelier.pdf');
     };
 }
 
