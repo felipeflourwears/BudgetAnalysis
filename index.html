@@ -396,11 +396,12 @@
                         totalAllBatchesPrice += totalPricePerBatch;
 
                         // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4">Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</td></tr>');
+                        var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</strong></td></tr>');
                         table.append(totalRow);
 
+
                         // Crear la cabecera de la tabla
-                        var thead = $('<thead><tr><th colspan="5">KIT ' + i + '</th><th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
+                        var thead = $('<thead><tr><th colspan="10">KIT ' + i + '</th><th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
                         table.append(thead);
 
                         var tbody = $('<tbody></tbody>');
@@ -409,6 +410,7 @@
                         storedData.forEach(function(item) {
                             var row = $('<tr></tr>');
                             for (var key in item) {
+                                console.log(item)
                                 if (item.hasOwnProperty(key)) {
                                     row.append('<td><strong>' + key + '</strong></td>');
                                     row.append('<td>' + item[key] + '</td>');
@@ -417,7 +419,10 @@
 
                             // Agregar columna para el precio total por tipo y tamaño
                             var itemKey = item.size;
+                            console.log("Update KSDAJKDSAJDS")
+                            console.log(itemKey)
                             if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
+                                console.log("Update KSDAJKDSAJDS")
                                 var pricePerItem = preciosPorSeleccion[itemKey];
                                 var totalForItem = pricePerItem * item.quantity;
                                 row.append('<td>Price per item: ' + pricePerItem + '</td>');
@@ -474,17 +479,17 @@
                     // Almacenar el artículo en la estructura de datos itemsByTypeAndSize
                     if (!itemsByTypeAndSize[key]) {
                         itemsByTypeAndSize[key] = {
-                            Type: 'Header',
-                            Size: key,
-                            Quantity: 0
+                            type: 'Header',
+                            size: key,
+                            quantity: 0
                         };
                     }
                     itemsByTypeAndSize[key].quantity += parseInt(quantity); // Actualizar la cantidad
 
                     currentBatchItems.push({
-                        Type: 'Header',
-                        Size: key,
-                        Quantity: quantity
+                        type: 'Header',
+                        size: key,
+                        quantity: quantity
                     });
                 });
 
@@ -497,17 +502,17 @@
                     // Almacenar el artículo en la estructura de datos itemsByTypeAndSize
                     if (!itemsByTypeAndSize[key]) {
                         itemsByTypeAndSize[key] = {
-                            Type: 'Shielf',
-                            Size: key,
-                            Quantity: 0
+                            type: 'Shielf',
+                            size: key,
+                            quantity: 0
                         };
                     }
                     itemsByTypeAndSize[key].quantity += parseInt(quantity); // Actualizar la cantidad
 
                     currentBatchItems.push({
-                        Type: 'Shielf',
-                        Size: key,
-                        Quantity: quantity
+                        type: 'Shielf',
+                        size: key,
+                        quantity: quantity
                     });
                 });
 
@@ -555,7 +560,8 @@
         });
         </script>
 
-<script>
+    <script>
+
 function generarPDF(event) {
     event.preventDefault();
 
@@ -588,24 +594,9 @@ function generarPDF(event) {
             let storedData = JSON.parse(localStorage.getItem('itemsData' + i));
 
             if (storedData !== null) {
-                storedData.forEach(function(item) {
-                    let row = [];
-                    for (let key in item) {
-                        if (item.hasOwnProperty(key)) {
-                            row.push(item[key]);
-                        }
-                    }
-                    doc.text(10, y, row.join(', '));
-                    y += 10; // Incrementar la posición vertical para la siguiente fila
-
-                    if (y >= pageHeight - 10) { // Si alcanza el límite de la página
-                        doc.addPage(); // Agregar una nueva página
-                        y = 10; // Reiniciar la posición en el eje Y para la nueva página
-                    }
-                });
-
                 let totalPricePerBatch = 0;
 
+                // Calcular el precio total del lote actual
                 storedData.forEach(function(item) {
                     let itemKey = item.size;
                     if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
@@ -617,8 +608,34 @@ function generarPDF(event) {
 
                 totalPricePerBatch += totalFixed;
 
-                doc.text(10, y + 10, `Precio total del lote ${i}: ${totalPricePerBatch}`);
+                // Mostrar el precio total del lote
+                doc.setFontSize(10);
+                doc.text(10, y + 10, `Precio total del lote ${i}: ${totalPricePerBatch.toFixed(2)}`);
                 y += 20; // Incrementar la posición vertical para el siguiente lote
+
+                // Mostrar los elementos del lote con sus precios individuales
+                storedData.forEach(function(item) {
+                    let row = [];
+                    row.push(`Type: ${item.type}, ${item.size}, Quantity: ${item.quantity}`);
+
+                    let itemKey = item.size;
+                    if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
+                        let pricePerItem = preciosPorSeleccion[itemKey];
+                        let totalForItem = pricePerItem * item.quantity;
+
+                        row.push(`Precio por ítem: ${pricePerItem.toFixed(2)}`);
+                        row.push(`Precio total por ítem: ${totalForItem.toFixed(2)}`);
+                    }
+
+                    doc.setFontSize(8); // Reducir tamaño de fuente
+                    doc.text(10, y, row.join(', '));
+                    y += 10; // Incrementar la posición vertical para la siguiente fila
+
+                    if (y >= pageHeight - 10) { // Si alcanza el límite de la página
+                        doc.addPage(); // Agregar una nueva página
+                        y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                    }
+                });
 
                 totalAllBatchesPrice += totalPricePerBatch; // Agregar al total de todos los lotes
 
@@ -629,14 +646,16 @@ function generarPDF(event) {
             }
         }
 
-        doc.text(10, y + 20, `Total de todos los lotes: ${totalAllBatchesPrice}`);
+        doc.setFontSize(10);
+        doc.text(10, y + 20, `Total de todos los lotes: ${totalAllBatchesPrice.toFixed(2)}`);
         y += 30; // Incrementar la posición vertical para el siguiente elemento
 
         doc.save('tablas-lotes.pdf');
     };
 }
 
-</script>
+
+    </script>
 
 
 
