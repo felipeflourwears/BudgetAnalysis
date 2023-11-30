@@ -180,109 +180,149 @@
             function saveDataToStorage(data, batch) {
                 localStorage.setItem('itemsData' + batch, JSON.stringify(data));
             }
-
+            // Crear un arreglo para almacenar los valores de los inputs
+            var quantityValues = {};
             function updateDataDisplay() {
-                var dataDisplay = $('#dataDisplay');
-                dataDisplay.empty(); // Limpiar el contenido actual
-                var totalPriceDisplay = $('#totalPriceDisplay'); // Obtener el div para mostrar el precio total
-                totalPriceDisplay.empty();
+    var dataDisplay = $('#dataDisplay');
+    dataDisplay.empty(); // Limpiar el contenido actual
+    var totalPriceDisplay = $('#totalPriceDisplay');
+    totalPriceDisplay.empty();
 
-                var totalAllBatchesPrice = 0; // Inicializar el precio total de todos los lotes
-                var cantidadLotes = 0; // Inicializar la cantidad de lotes
+    var totalAllBatchesPrice = 0;
+    var cantidadLotes = 0;
 
-                for (var i = 1; i < currentBatch; i++) {
-                    var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
-                    cantidadLotes++;
+    for (var i = 1; i < currentBatch; i++) {
+        (function (i) {
+            var storedData = JSON.parse(localStorage.getItem('itemsData' + i));
+            cantidadLotes++;
 
-                    if (storedData !== null) { // Verificar si storedData no es nulo
-                        var totalPricePerBatch = 0; // Inicializar el precio total del lote actual
+            if (storedData !== null) {
+                var totalPricePerBatch = 0;
 
-                        var table = $('<table class="batch-table"></table>');
+                var uniqueId = 'quantity_' + i;
+                var uniqueClass = 'input-number-' + i;
 
-                        // Calcular el precio total del lote actual
-                        storedData.forEach(function(item) {
-                            var itemKey = item.size;
-                            if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
-                                var pricePerItem = preciosPorSeleccion[itemKey];
-                                var totalForItem = pricePerItem * item.quantity;
-                                totalPricePerBatch += totalForItem;
-                            }
-                        });
+                var quantityInput = $('<div class="input-group"></div>');
+                var decreaseButton = $('<div class="input-group-prepend"><button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="' + uniqueId + '"><span class="glyphicon glyphicon-minus">-</span></button></div>');
+                var quantityField = $('<input type="number" name="quantity" id="' + uniqueId + '" class="' + uniqueClass + '" value="1" min="1" max="500">');
+                var increaseButton = $('<div class="input-group-append"><button type="button" class="btn btn-success btn-number" data-type="plus" data-field="' + uniqueId + '"><span class="glyphicon glyphicon-plus">+</span></button></div>');
 
-                        // Agregar el total fijo al precio total del lote actual
-                        totalPricePerBatch += totalFixed;
-
-                        // Actualizar el total de todos los lotes sumados
-                        totalAllBatchesPrice += totalPricePerBatch;
-
-                        // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</strong></td></tr>');
-                        table.append(totalRow);
-
-
-                        // Crear la cabecera de la tabla
-                        var thead = $('<thead><tr><th colspan="10">KIT ' + i + '</th><th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
-                        table.append(thead);
-
-                        var tbody = $('<tbody></tbody>');
-
-                        // Crear filas para cada elemento en el lote
-                        storedData.forEach(function(item) {
-                            var row = $('<tr></tr>');
-                            for (var key in item) {
-                                console.log(item)
-                                if (item.hasOwnProperty(key)) {
-                                    row.append('<td><strong>' + key + '</strong></td>');
-                                    row.append('<td>' + item[key] + '</td>');
-                                }
-                            }
-
-                            // Agregar columna para el precio total por tipo y tamaño
-                            var itemKey = item.size;
-                            console.log("Update KSDAJKDSAJDS")
-                            console.log(itemKey)
-                            if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
-                                console.log("Update KSDAJKDSAJDS")
-                                var pricePerItem = preciosPorSeleccion[itemKey];
-                                var totalForItem = pricePerItem * item.quantity;
-                                row.append('<td>Price per item: ' + pricePerItem + '</td>');
-                                row.append('<td>Total price: ' + totalForItem + '</td>');
-                            }
-
-                            tbody.append(row);
-                        });
-
-                        table.append(tbody);
-                        dataDisplay.append(table);
-                    }
+                // Establecer el valor del input basado en el atributo 'data-storedValue'
+                var storedValue = quantityField.data('storedValue');
+                if (storedValue !== undefined && !isNaN(storedValue)) {
+                    quantityField.val(storedValue);
                 }
 
-                // Calcular el descuento basado en la cantidad de lotes
-                var descuentoPorLotes = calcularDescuentoPorLotes(cantidadLotes);
-                var descuentoTotal = totalAllBatchesPrice * descuentoPorLotes;
-                var precioFinal = totalAllBatchesPrice - descuentoTotal;
+                quantityInput.append(decreaseButton);
+                quantityInput.append(quantityField);
+                quantityInput.append(increaseButton);
 
-                // Mostrar el descuento aplicado
-                var descuentoRow = $('<div>Discount applied: ' + descuentoTotal.toFixed(2) + ' MXN</div>');
-                descuentoRow.css({
-                    'font-weight': 'bold',
-                    'font-size': '1.2em',
-                    'color': 'red' // Puedes cambiar el color según tu preferencia
+                dataDisplay.append(quantityInput);
+
+                // Manejo de eventos usando delegación para los botones generados dinámicamente
+                dataDisplay.off('click', '.btn-number').on('click', '.btn-number', function (e) {
+                    e.preventDefault();
+
+                    var type = $(this).attr('data-type');
+                    var fieldName = $(this).attr('data-field');
+                    var input = $('#' + fieldName);
+                    var currentValue = parseInt(input.val());
+                    var minValue = parseInt(input.attr('min'));
+                    var maxValue = parseInt(input.attr('max'));
+
+                    if (!isNaN(currentValue)) {
+                        if (type === 'minus') {
+                            if (currentValue > minValue) {
+                                input.val(currentValue - 1).change();
+                            }
+                            if (parseInt(input.val()) === minValue) {
+                                $(this).attr('disabled', true);
+                            }
+                        } else if (type === 'plus') {
+                            if (currentValue < maxValue) {
+                                input.val(currentValue + 1).change();
+                            }
+                            if (parseInt(input.val()) === maxValue) {
+                                $(this).attr('disabled', true);
+                            }
+                        }
+                    } else {
+                        input.val(1);
+                    }
                 });
 
-                totalPriceDisplay.append(descuentoRow);
+                var table = $('<table class="batch-table"></table>');
 
-                // Mostrar el precio final después de aplicar el descuento
-                var precioFinalRow = $('<div>Final price after discount: ' + precioFinal.toFixed(2) + ' MXN</div>');
-                precioFinalRow.css({
-                    'font-weight': 'bold',
-                    'font-size': '1.2em',
-                    'color': 'black' // Puedes cambiar el color según tu preferencia
+                storedData.forEach(function (item) {
+                    var itemKey = item.size;
+                    if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
+                        var pricePerItem = preciosPorSeleccion[itemKey];
+                        var totalForItem = pricePerItem * item.quantity;
+                        totalPricePerBatch += totalForItem;
+                    }
                 });
 
-                totalPriceDisplay.append(precioFinalRow);
+                totalPricePerBatch += totalFixed;
+                totalAllBatchesPrice += totalPricePerBatch;
 
+                var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</strong></td></tr>');
+                table.append(totalRow);
+
+                var thead = $('<thead><tr><th colspan="10">KIT ' + i + '</th><th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '">Delete Batch</button></th></tr></thead>');
+                table.append(thead);
+
+                var tbody = $('<tbody></tbody>');
+
+                storedData.forEach(function (item) {
+                    var row = $('<tr></tr>');
+                    for (var key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            row.append('<td><strong>' + key + '</strong></td>');
+                            row.append('<td>' + item[key] + '</td>');
+                        }
+                    }
+
+                    var itemKey = item.size;
+                    if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
+                        var pricePerItem = preciosPorSeleccion[itemKey];
+                        var totalForItem = pricePerItem * item.quantity;
+                        row.append('<td>Price per item: ' + pricePerItem + '</td>');
+                        row.append('<td>Total price: ' + totalForItem + '</td>');
+                    }
+
+                    tbody.append(row);
+                });
+
+                table.append(tbody);
+                dataDisplay.append(table);
             }
+        })(i);
+    }
+
+    var descuentoPorLotes = calcularDescuentoPorLotes(cantidadLotes);
+    var descuentoTotal = totalAllBatchesPrice * descuentoPorLotes;
+    var precioFinal = totalAllBatchesPrice - descuentoTotal;
+
+    var descuentoRow = $('<div>Discount applied: ' + descuentoTotal.toFixed(2) + ' MXN</div>');
+    descuentoRow.css({
+        'font-weight': 'bold',
+        'font-size': '1.2em',
+        'color': 'red'
+    });
+
+    totalPriceDisplay.append(descuentoRow);
+
+    var precioFinalRow = $('<div>Final price after discount: ' + precioFinal.toFixed(2) + ' MXN</div>');
+    precioFinalRow.css({
+        'font-weight': 'bold',
+        'font-size': '1.2em',
+        'color': 'black'
+    });
+
+    totalPriceDisplay.append(precioFinalRow);
+}
+
+            
 
 
 
