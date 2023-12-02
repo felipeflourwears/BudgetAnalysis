@@ -9,6 +9,7 @@ $.each(sectionArray, function(index, value){
          var offsetSection = $('#' + 'section_' + value).offset().top - 90;
          var docScroll = $(document).scrollTop();
          var docScroll1 = docScroll + 1;
+         var textColorElement = $('.headertext');
          
         
          if ( docScroll1 >= offsetSection ){

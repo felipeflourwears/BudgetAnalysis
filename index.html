@@ -26,7 +26,7 @@
         <link href="./css/templatemo-first-portfolio-style.css" rel="stylesheet">
         <link rel="stylesheet" href="./css/index.css">
 
-        <link rel="shortcut icon" href="./images/pop.png" type="image/x-icon">
+        <link rel="shortcut icon" href="./images/popnav.png" type="image/x-icon">
     </head>
     
     <body>
@@ -39,22 +39,85 @@
 
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <h1 style="color: white">Budget PopAtelier</h1>
-                <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0"><img src="./images/pop.png" alt="Logo" class="logo"></a>
-
+                <h1 class="headertext">Budget <span style="margin-left: 5px;">Smart</span></h1>
+                <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0" target="_blank"><img src="./images/pop.png" alt="Logo" class="logo"></a>
             </div>
-        </nav>
+        </nav>        
+    
 
-        <br><br> <br><br> <br><br>
+        <br><br> <br><br> <br><br><br><br>
 
         <header>
-            <h1>Budget Stands &nbsp;<i class="bi bi-archive-fill"></i></h1>
+            <h1>Budget&nbsp;<i class="bi bi-archive-fill"></i></h1>
+        </header>
+        <i class="tooltip bi bi-question"></i> <small style="font-size: 10px;" class="tooltiptext">
+            Experience the capabilities of our Budget Smart system through interactive panels, enabling you to simulate estimated costs associated with product placement to craft your personalized stand.
+        </small>
+        
+       
+        <header>
+            <h1>Essential&nbsp;<i class="bi bi-people-fill"></i></h1>
         </header>
 
         <form action="#" method="POST">
             <div class="main-wrapper">
                 <main>
                     <div class="container-fluid">
+                        <div class="row">
+                            <h6>Data company <i class="bi bi-building"></i></h6>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Name Company: </label>
+                                <input type="text" class="form-control" name="name_company" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Address Company: </label>
+                                <input type="text" class="form-control" name="address_company" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Phone: </label>
+                                <input type="text" class="form-control" name="phone_company" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Business Email: </label>
+                                <input type="text" class="form-control" name="business_email_company" id="" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h6>Data client <i class="bi bi-person-badge-fill"></i></h6>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Name Client: </label>
+                                <input type="text" class="form-control" name="name_client" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Address client: </label>
+                                <input type="text" class="form-control" name="address_client" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Phone: </label>
+                                <input type="text" class="form-control" name="phone_client" id="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                <label class="bmd-label-floating">Business Email Client: </label>
+                                <input type="text" class="form-control" name="email_client" id="" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
                             <div class="col-12">
                                 <button type="button" id="addHeaderBtn" class="btn btn-primary mr-2">Add Header</button>
@@ -93,7 +156,8 @@
                         </div>
                         <br>
                         <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
-                        <button class=" btn btn-generar-pdf btn-success" type="button" id="btn-generar" value="Generar PDF" onclick="generarPDF(event)">Generate PDF</button>
+                        <button class="btn btn-generar-pdf btn-success" type="submit" id="btn-generar">Generate PDF</button>
+
                     </div>
                 </main>
             </div>
@@ -216,7 +280,7 @@
                         totalAllBatchesPrice += totalPricePerBatch;
 
                         // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': ' + totalPricePerBatch + '</strong></td></tr>');
+                        var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': $ ' + totalPricePerBatch + '</strong></td></tr>');
                         table.append(totalRow);
 
 
@@ -239,10 +303,8 @@
 
                             // Agregar columna para el precio total por tipo y tamaño
                             var itemKey = item.size;
-                            console.log("Update KSDAJKDSAJDS")
                             console.log(itemKey)
                             if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
-                                console.log("Update KSDAJKDSAJDS")
                                 var pricePerItem = preciosPorSeleccion[itemKey];
                                 var totalForItem = pricePerItem * item.quantity;
                                 row.append('<td>Price per item: ' + pricePerItem + '</td>');
@@ -263,7 +325,7 @@
                 var precioFinal = totalAllBatchesPrice - descuentoTotal;
 
                 // Mostrar el descuento aplicado
-                var descuentoRow = $('<div>Discount applied: ' + descuentoTotal.toFixed(2) + ' MXN</div>');
+                var descuentoRow = $('<div>Discount applied: $ ' + descuentoTotal.toFixed(2) + '</div>');
                 descuentoRow.css({
                     'font-weight': 'bold',
                     'font-size': '1.2em',
@@ -273,7 +335,7 @@
                 totalPriceDisplay.append(descuentoRow);
 
                 // Mostrar el precio final después de aplicar el descuento
-                var precioFinalRow = $('<div>Final price after discount: ' + precioFinal.toFixed(2) + ' MXN</div>');
+                var precioFinalRow = $('<div>Final price after discount: $ ' + precioFinal.toFixed(2) + '</div>');
                 precioFinalRow.css({
                     'font-weight': 'bold',
                     'font-size': '1.2em',

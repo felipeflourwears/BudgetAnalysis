@@ -50,24 +50,24 @@ $(document).ready(function() {
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Header size:</label>
+                        <label class="bmd-label-floating">Select header size:</label>
                         <select class="form-control" name="headerSize">
-                            <option value="120">120</option>
-                            <option value="90">90</option>
-                            <option value="60">60</option>
-                            <option value="45">45</option>
+                            <option value="120">4' (120 cm)</option>
+                            <option value="90">3' (90 cm)</option>
+                            <option value="60">2' (60 cm)</option>
+                            <option value="45">1.5' (45 cm)</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-6 col-md-6">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Select your PI shelf:</label>
+                        <label class="bmd-label-floating">Select pitch(screen resolution):</label>
                         <div class="input-group">
                             <select class="form-control" name="headerSizePi">
-                                <option value="P2">P2</option>
-                                <option value="P1.8">P1.8</option>
-                                <option value="P1.5">P1.5</option>
-                                <option value="P1.2">P1.2</option>
+                                <option value="P2">2</option>
+                                <option value="P1.8">1.8</option>
+                                <option value="P1.5">1.5</option>
+                                <option value="P1.2">1.2</option>
                             </select>
                             &nbsp;&nbsp;
                             <span class="input-group-btn">
@@ -75,6 +75,9 @@ $(document).ready(function() {
                                     <span class="glyphicon glyphicon-minus">-</span>
                                 </button>
                             </span>
+                            &nbsp;
+                            <label class="bmd-label-floating">Quantity:</label>
+                            &nbsp;
                             <input type="text" name="quantity" class="form-control input-number" value="1" min="1" max="10">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity">
@@ -111,23 +114,23 @@ $(document).ready(function() {
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Shelf size:</label>
+                        <label class="bmd-label-floating">Select shelf size:</label>
                         <select class="form-control shielf-size" name="shielfSize">
-                            <option value="120">120</option>
-                            <option value="90">90</option>
-                            <option value="60">60</option>
-                            <option value="45">45</option>
+                            <option value="120">4' (120 cm)</option>
+                            <option value="90">3' (90 cm)</option>
+                            <option value="60">2' (60 cm)</option>
+                            <option value="45">1.5' (45 cm)</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-6 col-md-6">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Select your PI shelf:</label>
+                        <label class="bmd-label-floating">Select pitch(screen resolution):</label>
                         <div class="input-group">
                             <select class="form-control pi-shielf" name="piShielf">
-                                <option value="P1.8">P1.8</option>
-                                <option value="P1.57">P1.57</option>
-                                <option value="P1.2">P1.2</option>
+                                <option value="P1.8">1.8</option>
+                                <option value="P1.57">1.57</option>
+                                <option value="P1.2">1.2</option>
                             </select>
                             &nbsp;&nbsp;
                             <span class="input-group-btn">
@@ -135,6 +138,9 @@ $(document).ready(function() {
                                     <span class="glyphicon glyphicon-minus">-</span>
                                 </button>
                             </span>
+                            &nbsp;
+                            <label class="bmd-label-floating">Quantity:</label>
+                            &nbsp;
                             <input type="text" name="quantity" class="form-control input-number" value="1" min="1" max="10">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity">

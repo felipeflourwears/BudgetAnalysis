@@ -49,3 +49,14 @@
     font-size: 24px;
     font-weight: bold;
     }
+
+    .tooltip {
+        background: #121212;
+        width: 40px; /* Ancho del botón */
+        height: 40px; /* Altura del botón */
+      }
+      
+      /* Estilos del ícono en blanco */
+      .icon-white {
+        color: #fff; /* Color blanco para el ícono */
+      }

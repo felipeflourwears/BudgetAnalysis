@@ -348,8 +348,8 @@ strong {
 }
 
 .logo {
-  width: 70px; /* Redimensiona la imagen del logo */
-  height: 70px;
+  width: 180px; /* Redimensiona la imagen del logo */
+  height: 110px;
   padding: 5px;
   transition: transform 0.3s ease-in-out; /* Añade un efecto de transición */
   display: flex;
@@ -1002,6 +1002,10 @@ strong {
   height: 10px;
 }
 
+.headertext{
+  color: white; font-size: 28px;
+}
+
 
 /*---------------------------------------
   RESPONSIVE STYLES               
@@ -1156,12 +1160,19 @@ strong {
     border-bottom: 1px solid var(--border-color);
     border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
   }
+  .headertext{
+    color: black; font-size: 28px;
+  }
+  
 }
 
 @media screen and (max-width: 575px) {
   .navbar .container {
     margin-right: 12px;
     margin-left: 12px;
+  }
+  .headertext{
+    color: black;
   }
 }
 
@@ -1185,7 +1196,9 @@ strong {
   h5 {
     font-size: 20px;
   }
-
+  .headertext{
+    color: black;
+  }
   .custom-btn,
   .navbar .custom-btn {
     font-size: 13px;
