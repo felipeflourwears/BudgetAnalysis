@@ -56,62 +56,6 @@
                 <main>
                     <div class="container-fluid">
                         <div class="row">
-                            <h6>Data company <i class="bi bi-building"></i></h6>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Name Company: </label>
-                                <input type="text" class="form-control" name="name_company" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Address Company: </label>
-                                <input type="text" class="form-control" name="address_company" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Phone: </label>
-                                <input type="text" class="form-control" name="phone_company" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Business Email: </label>
-                                <input type="text" class="form-control" name="business_email_company" id="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <h6>Data client <i class="bi bi-person-badge-fill"></i></h6>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Name Client: </label>
-                                <input type="text" class="form-control" name="name_client" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Address client: </label>
-                                <input type="text" class="form-control" name="address_client" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Phone: </label>
-                                <input type="text" class="form-control" name="phone_client" id="" required>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                <label class="bmd-label-floating">Business Email Client: </label>
-                                <input type="text" class="form-control" name="email_client" id="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
                             <div class="col-12">
                                 <button type="button" id="addHeaderBtn" class="btn btn-primary mr-2">Add Header</button>
                                 <button type="button" id="deleteHeaderBtn" class="btn btn-danger">Delete Header</button>
@@ -149,7 +93,7 @@
                         </div>
                         <br>
                         <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
-                        <button class="btn btn-generar-pdf btn-success" type="submit" id="btn-generar">Generate PDF</button>
+                        <button class="btn btn-generar-pdf btn-success" type="button" id="btn-generar" onclick="generarPDF(event)">Generate PDF</button>
 
                     </div>
                 </main>
@@ -186,19 +130,19 @@
             'Pitch 1.2 Header': 1656.2,
 
             'Pitch 1.8 Shelf': 640.9,
-            'Pitch 1.57 Shelf': 672.1,
+            'Pitch 1.5 Shelf': 672.1,
             'Pitch 1.2 Shelf': 861.9,
 
             'Pitch 1.8 Shelf': 456.3,
-            'Pitch 1.57 Shelf': 533,
+            'Pitch 1.5 Shelf': 533,
             'Pitch 1.2 Shelf': 655.2,
 
             'Pitch 1.8 Shelf': 362.7,
-            'Pitch 1.57 Shelf': 440.7,
+            'Pitch 1.5 Shelf': 440.7,
             'Pitch 1.2 Shelf': 487.5,
 
             'Pitch 1.8 Shelf': 555.1,
-            'Pitch 1.57 Shelf': 617.5,
+            'Pitch 1.5 Shelf': 617.5,
             'Pitch 1.2 Shelf': 679.9
         };
 
@@ -285,7 +229,7 @@
                         // Crear la cabecera de la tabla
                         var thead = $('<thead><tr>' +
                             '<th>Type</th>' +
-                            '<th>Size (Pitch)</th>' +
+                            '<th>Size</th>' +
                             '<th>Quantity</th>' +
                             '<th>Price per Item</th>' +
                             '<th>Total price</th>' +

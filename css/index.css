@@ -62,9 +62,5 @@
       }
 
       .titleh1 {
-        letter-spacing: 1.5px; /* Ajusta el valor según tu preferencia */
+        letter-spacing: 0.4px; /* Ajusta el valor según tu preferencia */
     }
-
-.space-option{
-  letter-spacing: 2px;
-}

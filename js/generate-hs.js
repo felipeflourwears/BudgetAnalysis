@@ -122,7 +122,7 @@ $(document).ready(function() {
                         <div class="input-group">
                             <select class="form-control pi-shielf" name="piShielf">
                                 <option value="1.8">1.8</option>
-                                <option value="1.57">1.57</option>
+                                <option value="1.5">1.5</option>
                                 <option value="1.2">1.2</option>
                             </select>
                         </div>
