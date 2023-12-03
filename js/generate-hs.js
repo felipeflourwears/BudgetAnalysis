@@ -78,7 +78,7 @@ $(document).ready(function() {
                             &nbsp;
                             <label class="bmd-label-floating">Quantity:</label>
                             &nbsp;
-                            <input type="text" name="quantity" class="form-control input-number" value="1" min="1" max="10">
+                            <input type="number" name="quantity" class="form-control input-number" value="1" min="1" max="500">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity">
                                     <span class="glyphicon glyphicon-plus">+</span>
