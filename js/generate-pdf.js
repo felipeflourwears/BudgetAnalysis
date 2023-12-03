@@ -1,9 +1,6 @@
-// Obtén una referencia al botón
 const botonGenerarPDF = document.getElementById('btn-generar');
 
-// Agrega un evento 'click' al botón
 botonGenerarPDF.addEventListener('click', function(event) {
-    // Obtén los valores de los campos
     const nameCompany = document.querySelector('input[name="name_company"]').value.trim();
     const addressCompany = document.querySelector('input[name="address_company"]').value.trim();
     const phoneCompany = document.querySelector('input[name="phone_company"]').value.trim();
@@ -13,7 +10,17 @@ botonGenerarPDF.addEventListener('click', function(event) {
     const phoneClient = document.querySelector('input[name="phone_client"]').value.trim();
     const emailClient = document.querySelector('input[name="email_client"]').value.trim();
 
-    // Llama a la función generarPDF pasando el objeto del evento y los valores de los campos
+    // Verificar si algún campo está vacío
+    if (!nameCompany || !addressCompany || !phoneCompany || !businessEmailCompany || !nameClient || !addressClient || !phoneClient || !emailClient) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please fill in all required fields to generate the PDF.'
+        });
+        return; // Detener la ejecución si hay campos vacíos
+    }
+
+    // Si todos los campos están llenos, llamar a la función para generar el PDF
     generarPDF(event, nameCompany, addressCompany, phoneCompany, businessEmailCompany, nameClient, addressClient, phoneClient, emailClient);
 });
 
@@ -79,8 +86,8 @@ function generarPDF(event,
             logoImg.crossOrigin = 'Anonymous';
         
             logoImg.onload = function() {
-                const logoWidth = 90;
-                const logoHeight = 30;
+                const logoWidth = 92;
+                const logoHeight = 28;
                 const pageWidth = 210;
                 const pageHeight = 297;
         
@@ -160,7 +167,7 @@ function generarPDF(event,
         
         
                // Estilo para "Kit requirements"
-               const kitRequirementsHeader = 'Mandatory KIT:';
+               const kitRequirementsHeader = 'Mandatory by KIT:';
         
                doc.setFontSize(12);
                doc.setFontStyle('bold');
@@ -278,10 +285,13 @@ function generarPDF(event,
         
                 doc.setFontSize(14);
                 doc.text(10, y + 20, `Total of all KITs: $ ${totalAllBatchesPrice.toFixed(2)}`);
-                y += 30; // Incrementar la posición vertical para el siguiente elemento
+                y += 10; // Incrementar la posición vertical para el siguiente elemento
                 doc.text(10, y + 20, `Final Price with discount: $ ${totalAllBatchesPrice - descuentoTotal.toFixed(2) * totalAllBatchesPrice}`);
                 y += 30; // Incrementar la posición vertical para el siguiente elemento
-        
+                // Dibujar una línea decorativa
+                doc.setLineWidth(0.2); // Ancho de la línea
+                doc.setDrawColor(0); // Color de la línea (negro)
+                doc.line(10, y, 10 + lineWidth2, y); // Dibujar línea horizontal
         
                 doc.save('budget-popatelier.pdf');
             };
