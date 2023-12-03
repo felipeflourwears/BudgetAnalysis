@@ -60,3 +60,11 @@
       .icon-white {
         color: #fff; /* Color blanco para el ícono */
       }
+
+      .titleh1 {
+        letter-spacing: 1.5px; /* Ajusta el valor según tu preferencia */
+    }
+
+.space-option{
+  letter-spacing: 2px;
+}

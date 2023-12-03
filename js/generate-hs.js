@@ -52,16 +52,16 @@ $(document).ready(function() {
                     <div class="form-group">
                         <label class="bmd-label-floating">Select header size:</label>
                         <select class="form-control" name="headerSize">
-                            <option value="120">4' (120 cm)</option>
-                            <option value="90">3' (90 cm)</option>
-                            <option value="60">2' (60 cm)</option>
-                            <option value="45">1.5' (45 cm)</option>
+                            <option value="120">4' &nbsp; (120 cms)</option>
+                            <option value="90">3' &nbsp; (90 cms)</option>
+                            <option value="60">2' &nbsp; (60 cms)</option>
+                            <option value="45">1.5' &nbsp; (45 cms)</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-6 col-md-6">
+                <div class="col-4 col-md-4">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Select pitch(screen resolution):</label>
+                        <label class="bmd-label-floating">Select pitch:</label>
                         <div class="input-group">
                             <select class="form-control" name="headerSizePi">
                                 <option value="P2">2</option>
@@ -69,21 +69,14 @@ $(document).ready(function() {
                                 <option value="P1.5">1.5</option>
                                 <option value="P1.2">1.2</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quantity">
-                                    <span class="glyphicon glyphicon-minus">-</span>
-                                </button>
-                            </span>
-                            &nbsp;
-                            <label class="bmd-label-floating">Quantity:</label>
-                            &nbsp;
-                            <input type="text" name="quantity" class="form-control input-number" value="1" min="1" max="10">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity">
-                                    <span class="glyphicon glyphicon-plus">+</span>
-                                </button>
-                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-md-4">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Quantity:</label>
+                        <div class="input-group">
+                            <input type="number" name="quantity" class="form-control input-number" value="1" min="1">
                         </div>
                     </div>
                 </div>
@@ -116,37 +109,30 @@ $(document).ready(function() {
                     <div class="form-group">
                         <label class="bmd-label-floating">Select shelf size:</label>
                         <select class="form-control shielf-size" name="shielfSize">
-                            <option value="120">4' (120 cm)</option>
-                            <option value="90">3' (90 cm)</option>
-                            <option value="60">2' (60 cm)</option>
-                            <option value="45">1.5' (45 cm)</option>
+                            <option value="120">4' &nbsp; (120 cms)</option>
+                            <option value="90">3' &nbsp; (90 cms)</option>
+                            <option value="60">2' &nbsp; (60 cms)</option>
+                            <option value="45">1.5' &nbsp; (45 cms)</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-6 col-md-6">
+                <div class="col-4 col-md-4">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Select pitch(screen resolution):</label>
+                        <label class="bmd-label-floating">Select pitch:</label>
                         <div class="input-group">
                             <select class="form-control pi-shielf" name="piShielf">
                                 <option value="P1.8">1.8</option>
                                 <option value="P1.57">1.57</option>
                                 <option value="P1.2">1.2</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quantity">
-                                    <span class="glyphicon glyphicon-minus">-</span>
-                                </button>
-                            </span>
-                            &nbsp;
-                            <label class="bmd-label-floating">Quantity:</label>
-                            &nbsp;
-                            <input type="text" name="quantity" class="form-control input-number" value="1" min="1" max="10">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity">
-                                    <span class="glyphicon glyphicon-plus">+</span>
-                                </button>
-                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-md-4">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Quantity:</label>
+                        <div class="input-group">
+                            <input type="number" name="quantity" class="form-control input-number" value="1" min="1">
                         </div>
                     </div>
                 </div>

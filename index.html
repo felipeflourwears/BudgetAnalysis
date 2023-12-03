@@ -39,7 +39,7 @@
 
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <h1 class="headertext">Budget <span style="margin-left: 5px;">Smart</span></h1>
+                <h1 class="headertext">Smart <span style="margin-left: 5px;">Budget</span></h1>
                 <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0" target="_blank"><img src="./images/pop.png" alt="Logo" class="logo"></a>
             </div>
         </nav>        
@@ -48,17 +48,9 @@
         <br><br> <br><br> <br><br><br><br>
 
         <header>
-            <h1>Budget&nbsp;<i class="bi bi-archive-fill"></i></h1>
+            <h1 class="titleh1">Budget&nbsp;<i class="bi bi-archive-fill"></i></h1>
         </header>
-        <i class="tooltip bi bi-question"></i> <small style="font-size: 10px;" class="tooltiptext">
-            <i class="bi bi-question-circle-fill"></i> Experience the capabilities of our Budget Smart system through interactive panels, enabling you to simulate estimated costs associated with product placement to craft your personalized stand.
-        </small>
         
-       
-        <header>
-            <h1>Essential&nbsp;<i class="bi bi-people-fill"></i></h1>
-        </header>
-
         <form action="#" method="POST">
             <div class="main-wrapper">
                 <main>
@@ -162,8 +154,9 @@
                     </div>
                 </main>
             </div>
-            <div id="totalPriceDisplay"></div>
+            <!-- <div id="totalPriceDisplay"></div> -->
             <div id="dataDisplay">Lotes</div>
+            <br>
         </form>
 
 
@@ -281,8 +274,8 @@
                         totalAllBatchesPrice += totalPricePerBatch;
 
                         // Crear fila para mostrar el precio total del lote
-                        var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': $ ' + totalPricePerBatch + '</strong></td></tr>');
-                        table.append(totalRow);
+                       /*  var totalRow = $('<tr><td colspan="4"><strong>Price KIT(Including prices for requeriments) ' + i + ': $ ' + totalPricePerBatch + '</strong></td></tr>');
+                        table.append(totalRow); */
 
 
                         // Crear la cabecera de la tabla
@@ -297,7 +290,7 @@
                             for (var key in item) {
                                 console.log(item)
                                 if (item.hasOwnProperty(key)) {
-                                    row.append('<td><strong>' + key + '</strong></td>');
+                                    /* row.append('<td><strong>' + key + '</strong></td>'); */
                                     row.append('<td>' + item[key] + '</td>');
                                 }
                             }
@@ -309,7 +302,7 @@
                                 var pricePerItem = preciosPorSeleccion[itemKey];
                                 var totalForItem = pricePerItem * item.quantity;
                                 row.append('<td>Price per item: ' + pricePerItem + '</td>');
-                                row.append('<td>Total price: ' + totalForItem + '</td>');
+                                row.append('<td><strong>Total price: </strong>' + totalForItem + '</td>');
                             }
 
                             tbody.append(row);
