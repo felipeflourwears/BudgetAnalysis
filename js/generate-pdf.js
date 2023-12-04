@@ -81,12 +81,14 @@ function generarPDF(event,
                         y += lineHeight; // Incrementar para el siguiente salto de línea
                     });
                 };
+                const currentDate = new Date().toLocaleDateString('es-MX');
                 // Array de encabezados
                 const headersArray = [
                     'POP Atelier S.A. de C.V',
                     'RFC: PAT170626UH9',
                     'Address: Avenida Javier Barros Sierra 495. Piso 2, Santa Fé',
-                    'Concept: Quotation'
+                    'Concept: Quotation',
+                    `Date: ${currentDate}`
                     // Agrega aquí todos los encabezados que desees
                 ];
                 doc.setFontSize(10);
@@ -103,7 +105,7 @@ function generarPDF(event,
                     yHeader += 7; // Incremento en la posición vertical para el siguiente encabezado
                 });
                 
-                y += 50;
+                y += 55;
             
         
                 doc.setFontSize(12);
@@ -207,7 +209,7 @@ function generarPDF(event,
         
                         // Mostrar el precio total del lote
                         doc.setFontSize(10);
-                        doc.text(10, y + 10, `Total Price Kit ${i}: ${totalPricePerBatch.toFixed(2)}`);
+                        doc.text(10, y + 10, `Total Price Kit ${i}: $${totalPricePerBatch.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                         y += 20; // Incrementar la posición vertical para el siguiente lote
         
                         // Mostrar los elementos del lote con sus precios individuales
@@ -251,15 +253,20 @@ function generarPDF(event,
                 }
                 // Calcular el descuento basado en el precio total de todos los lotes
                 var descuentoTotal = calcularDescuentoPorLotes(cantidadLotes);
+                console.log("Cantidad de lotes: ", cantidadLotes)
+
                 doc.setFontSize(12);
                 doc.text(10, y + 10, `Total KITs: ${cantidadLotes}`);
-                doc.text(10, y + 15, `Total Discount: $ ${descuentoTotal.toFixed(2) * totalAllBatchesPrice}`);
-        
+                if(cantidadLotes > 150){
+                    doc.text(10, y + 15, `Total Discount: $ ${descuentoTotal.toFixed(2) * totalAllBatchesPrice}`);
+                }
                 doc.setFontSize(12);
                 doc.text(10, y + 20, `Total of all KITs: $ ${totalAllBatchesPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y += 10; // Incrementar la posición vertical para el siguiente elemento
                 doc.setFontStyle('bold');
-                doc.text(10, y + 20, `Final Price with discount: $ ${(totalAllBatchesPrice - descuentoTotal.toFixed(2) * totalAllBatchesPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                if(cantidadLotes > 150){
+                    doc.text(10, y + 20, `Final Price with discount: $ ${(totalAllBatchesPrice - descuentoTotal.toFixed(2) * totalAllBatchesPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                }
                 y += 30; // Incrementar la posición vertical para el siguiente elemento
                 // Dibujar una línea decorativa
                 doc.setLineWidth(0.2); // Ancho de la línea
