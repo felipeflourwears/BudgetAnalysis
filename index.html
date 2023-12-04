@@ -420,11 +420,11 @@
                 });
 
                 // Crea la cadena con el formato deseado
-                const formattedSize = `${formattedTotalQuantity} ---> ${formattedTotalValue}`;
+                const formattedSize = `${formattedTotalValue}`;
 
                 // Agregar el valor de 'Total Quantity' al objeto currentBatchItems
                 currentBatchItems.push({
-                    type: 'TOTAL KITS',
+                    type: 'Mandatory KITS',
                     size: formattedSize,
                     quantity: totalQuantity,
                 });

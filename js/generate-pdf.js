@@ -99,7 +99,7 @@ function generarPDF(event,
                 const currentDate = new Date().toLocaleDateString('es-MX');
                 // Array de encabezados
                 const headersArray = [
-                    'POP Atelier LLC',
+                    'POP ATELIER LLC',
                     'Concept: Quotation',
                     `Date: ${currentDate}`
                     // Agrega aquí todos los encabezados que desees
@@ -238,22 +238,22 @@ function generarPDF(event,
                         storedData.forEach(function(item) {
                             let row = [];
                             // Obtiene la cadena sin los últimos 6 dígitos
-                            if (item.type === "TOTAL KITS") {
+                            if (item.type === "Mandatory KITS") {
                                 row.push(`Total KITS: ${item.quantity}`);
                                 contKits += parseInt(item.quantity);
                                 console.log("UDSAODSADSA");
                                 console.log(totalPricePerBatch , parseInt(item.quantity));
                                 totalPricePerBatchFormatted = totalPricePerBatch * parseInt(item.quantity);
-                                doc.text(10, y + 10, `Total Items:                 $${totalPricePerBatchFormatted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                                doc.text(10, y + 10, `Total Items:                                                                  $${totalPricePerBatchFormatted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 contBatch += totalPricePerBatchFormatted;
                                 y+=9
                                 kitsprice = item.quantity * priceMandatory
-                                doc.text(10, y + 10, `Total Price KITS:         $${kitsprice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                                doc.text(10, y + 10, `Total Price KITS:                                                          $${kitsprice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 y+=20
+                                y = checkSpaceAndAddPage(doc, y, requiredSpace2);
                                 toption = kitsprice + totalPricePerBatchFormatted
-                                doc.text(10, y + 10, `Total Option:               $${toption.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                                doc.text(10, y + 10, `Total Option ${i}:                                                              $${toption.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 y+=5
-
                                 y = checkSpaceAndAddPage(doc, y, requiredSpace2);
 
                             }else {
