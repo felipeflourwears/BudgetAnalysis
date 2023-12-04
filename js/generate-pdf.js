@@ -85,9 +85,8 @@ function generarPDF(event,
                 const currentDate = new Date().toLocaleDateString('es-MX');
                 // Array de encabezados
                 const headersArray = [
-                    'POP Atelier S.A. de C.V',
+                    'POP Atelier LLC',
                     'RFC: PAT170626UH9',
-                    'Address: Avenida Javier Barros Sierra 495. Piso 2, Santa Fé',
                     'Concept: Quotation',
                     `Date: ${currentDate}`
                     // Agrega aquí todos los encabezados que desees
@@ -283,8 +282,8 @@ function generarPDF(event,
                 
 
                 doc.setFontSize(12);
-                doc.text(10, y + 10, `Total Selection's: ${contKits}`);
-                y+=5
+                //doc.text(10, y + 10, `Total Selection's: ${contKits}`);
+                //y+=5
                 doc.text(10, y + 10, `Total Mandatory KITS: ${contKits}`);
                 y+=20
                 
@@ -300,7 +299,7 @@ function generarPDF(event,
                 doc.text(10, y + 10, `Total Price Mandatory KITS: $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y+= 5;
                 doc.text(10, y + 20, `Total of all KITs: $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
-                y += 20; // Incrementar la posición vertical para el siguiente elemento
+                y += 30; // Incrementar la posición vertical para el siguiente elemento
                 if(contKits > 500){
                     doc.text(10, y + 10, `Discount: $ ${(totalDiscount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                     y+= 10;
