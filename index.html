@@ -56,6 +56,17 @@
                 <main>
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="col-4 col-md-4">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Total Quantity:</label>
+                                    <div class="input-group">
+                                        <input type="number" name="cantidad" class="form-control input-number"  style="width: 60px;" value="1" min="1" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
                             <div class="col-12">
                                 <button type="button" id="addHeaderBtn" class="btn btn-primary mr-2">Add Header</button>
                                 <button type="button" id="deleteHeaderBtn" class="btn btn-danger">Delete Header</button>
@@ -223,18 +234,20 @@
 
 
                         // Crear la cabecera de la tabla
-                        var thead = $('<thead><tr><th colspan="8">KIT ' + i + '</th></tr></thead>');
+                        var thead = $('<thead><tr><th colspan="8">SELECTION ' + i + '</th></tr></thead>');
                         table.append(thead);
 
-                        // Crear la cabecera de la tabla
                         var thead = $('<thead><tr>' +
-                            '<th>Type</th>' +
-                            '<th>Size</th>' +
-                            '<th>Quantity</th>' +
-                            '<th>Price per Item</th>' +
-                            '<th>Total price</th>' +
-                            '<th><button class="btn delete-batch-btn btn-danger" data-batch="' + i + '"><i class="bi bi-trash"></i></th>'+
-                            '</tr></thead>');
+                        '<th>Type</th>' +
+                        '<th>Size</th>' +
+                        '<th>Quantity</th>' +
+                        '<th>Price per Item</th>' +
+                        '<th>Total price</th>' +
+                        '<th>' +
+                        '<button class="btn delete-batch-btn btn-danger" data-batch="' + i + '"><i class="bi bi-trash"></i></button>' +
+                        '</th>' +
+                        '</tr></thead>');
+
                         table.append(thead);
 
 
@@ -386,6 +399,18 @@
                     });
                 });
 
+                var totalQuantity = $('input[name="cantidad"]').val(); // Obtener el valor del input 'Total Quantity'
+
+                // Agregar el valor de 'Total Quantity' al objeto currentBatchItems
+                currentBatchItems.push({
+                    type: 'TOTAL KITS',
+                    size: "🡆",
+                    quantity: totalQuantity
+                });
+
+                 // Restablecer el valor del input a '1' para el próximo lote
+                $('input[name="cantidad"]').val('1');
+
 
                 // Guardar el lote actual en localStorage con una clave diferente para cada lote
                 localStorage.setItem('itemsData' + currentBatch, JSON.stringify(currentBatchItems));
@@ -411,18 +436,12 @@
                     }
                 });
 
-                console.log('El precio total por lote es: ' + totalPricePerLote);
+                // Calcular el precio total por lote multiplicado por la cantidad total
+                var totalPriceForAllItems = totalPricePerLote * totalQuantity;
+                console.log('El precio total por lote multiplicado por la cantidad total es: ' + totalPriceForAllItems);
 
-                // Mostrar el desglose de precios por tipo y tamaño
-                for (var itemKey in itemsByTypeAndSize) {
-                    var item = itemsByTypeAndSize[itemKey];
-                    var key = item.size;
-                    if (preciosPorSeleccion.hasOwnProperty(key)) {
-                        var pricePerItem = preciosPorSeleccion[key];
-                        var totalForItem = pricePerItem * item.quantity;
-                        console.log('Tipo y tamaño:', item.size, ' Cantidad:', item.quantity, ' Precio por artículo:', pricePerItem, ' Precio total:', totalForItem);
-                    }
-                }
+                
+                //////
             });
 
             // Mostrar los datos al cargar la página
