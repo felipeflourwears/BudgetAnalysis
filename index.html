@@ -240,7 +240,7 @@
                         table.append(thead);
 
                         var thead = $('<thead><tr>' +
-                        '<th>Type</th>' +
+                        '<th>Product</th>' +
                         '<th>Size</th>' +
                         '<th>Quantity</th>' +
                         '<th>Price per Item</th>' +
@@ -403,11 +403,30 @@
 
                 var totalQuantity = $('input[name="cantidad"]').val(); // Obtener el valor del input 'Total Quantity'
 
+                //LF
+                // Calcula el valor total multiplicando totalQuantity por totalFixed
+                const totalValue = totalQuantity * totalFixed;
+
+                // Formatea totalQuantity como cantidad sin símbolo de dólar
+                const formattedTotalQuantity = totalQuantity.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+                });
+
+                // Formatea el valor total como cantidad monetaria
+                const formattedTotalValue = '$' + totalValue.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+                });
+
+                // Crea la cadena con el formato deseado
+                const formattedSize = `${formattedTotalQuantity} ---> ${formattedTotalValue}`;
+
                 // Agregar el valor de 'Total Quantity' al objeto currentBatchItems
                 currentBatchItems.push({
                     type: 'TOTAL KITS',
-                    size: "--->",
-                    quantity: totalQuantity
+                    size: formattedSize,
+                    quantity: totalQuantity,
                 });
 
                  // Restablecer el valor del input a '1' para el próximo lote

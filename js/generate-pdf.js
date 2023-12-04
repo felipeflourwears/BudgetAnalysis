@@ -1,3 +1,14 @@
+// Comprueba si hay suficiente espacio para añadir contenido y, si no, agrega una nueva página y reinicia la posición vertical
+function checkSpaceAndAddPage(doc, y, requiredSpace) {
+    const pageHeight = doc.internal.pageSize.height;
+    const pageLimit = pageHeight - 20; // Límite de altura de la página
+    if (y + requiredSpace > pageLimit) {
+      doc.addPage();
+      return 10; // Reinicia la posición en el eje Y para la nueva página
+    }
+    return y;
+  }
+
 function generarPDF(event,
     nameCompany,
     addressCompany,
@@ -68,6 +79,8 @@ function generarPDF(event,
                 const startX = (pageWidth - logoWidth) / 2;
                 const startY = 10;
                 const priceMandatory= 2668.31;
+                let requiredSpace = 70;
+                let requiredSpace2 = 35;
         
                 doc.addImage(this, 'PNG', startX, startY, logoWidth, logoHeight);
                   
@@ -241,13 +254,7 @@ function generarPDF(event,
                                 doc.text(10, y + 10, `Total Option:               $${toption.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 y+=5
 
-                                // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
-                                const hasEnoughSpaceForMandotory2 = y + 20 < pageLimit1; // Cambia 100 según sea necesario
-                            
-                                if (!hasEnoughSpaceForMandotory2) {
-                                    doc.addPage(); // Agregar nueva página si no hay suficiente espacio
-                                    y = 10; // Reiniciar la posición en el eje Y para la nueva página
-                                }
+                                y = checkSpaceAndAddPage(doc, y, requiredSpace2);
 
                             }else {
                                 // Agregar lógica para obtener la variable sizeWithoutLastSix
@@ -315,11 +322,13 @@ function generarPDF(event,
 
                 doc.text(10, y + 10, `Total Price Mandatory KITS:       $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y+= 5;
+                
+                y = checkSpaceAndAddPage(doc, y, requiredSpace);
+
+                const hasEnoughSpaceForMandotoryP = y + 70 < pageLimit1; // Cambia 100 según sea necesario
+
                 doc.text(10, y + 20, `Total of all KITs:                           $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y += 30; // Incrementar la posición vertical para el siguiente elemento
-                
-                 // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
-                const hasEnoughSpaceForMandotoryP = y + 50 < pageLimit1; // Cambia 100 según sea necesario
             
                 if (!hasEnoughSpaceForMandotoryP) {
                      doc.addPage(); // Agregar nueva página si no hay suficiente espacio
@@ -341,22 +350,22 @@ function generarPDF(event,
                 doc.setFontSize(12);
                 doc.setFontStyle('bold');
                 
-                const pageLimit2 = doc.internal.pageSize.height - 10;
-                // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
-                const hasEnoughSpaceForMandotory2 = y + 100 < pageLimit1; // Cambia 100 según sea necesario
-            
-                if (!hasEnoughSpaceForMandotory2) {
-                    doc.addPage(); // Agregar nueva página si no hay suficiente espacio
-                    y = 10; // Reiniciar la posición en el eje Y para la nueva página
-                }
+               
 
                 if(contKits > 500){
                     console.log("Descuento")
                 }else {
+                     // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
+                    const hasEnoughSpaceForMandotory2 = y + 30 < pageLimit1; // Cambia 100 según sea necesario
+                
+                    if (!hasEnoughSpaceForMandotory2) {
+                        doc.addPage(); // Agregar nueva página si no hay suficiente espacio
+                        y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                    }
                     doc.setFontSize(12);
                     doc.text(10, y + 20, `Total Final:                                    $ ${totalFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 }
-                y += 20; // Incrementar la posición vertical para el siguiente elemento
+                y += 25; // Incrementar la posición vertical para el siguiente elemento
                 // Dibujar una línea decorativa
                 doc.setLineWidth(0.2); // Ancho de la línea
                 doc.setDrawColor(0); // Color de la línea (negro)
