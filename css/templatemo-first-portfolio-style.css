@@ -310,7 +310,7 @@ strong {
 
 .is-sticky,
 .is-sticky .navbar .container {
-  background: var(--white-color);
+  background: #121212;
   box-shadow: 0 1rem 3rem rgb(0 0 0 / 18%);
 }
 
@@ -334,7 +334,7 @@ strong {
 }
 
 .navbar {
-  background: #2b2b2b;
+  background: #121212;
   position: absolute;
   z-index: 9;
   right: 0;
@@ -348,8 +348,8 @@ strong {
 }
 
 .logo {
-  width: 180px; /* Redimensiona la imagen del logo */
-  height: 110px;
+  width: 330px; /* Redimensiona la imagen del logo */
+  height: 90px;
   padding: 5px;
   transition: transform 0.3s ease-in-out; /* Añade un efecto de transición */
   display: flex;
@@ -1163,13 +1163,20 @@ strong {
   .headertext{
     color: black; font-size: 28px;
   }
+  .navbar .container {
+    background: #121212;
+  }
   
 }
 
 @media screen and (max-width: 575px) {
+  .navbar{
+    background: #121212;
+  }
   .navbar .container {
     margin-right: 12px;
     margin-left: 12px;
+    background: #121212;
   }
   .headertext{
     color: black;

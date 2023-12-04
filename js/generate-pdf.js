@@ -60,10 +60,11 @@ function generarPDF(event,
         
             logoImg.onload = function() {
                 const logoWidth = 88;
-                const logoHeight = 25;
+                const logoHeight = 22;
                 const pageWidth = 210;
                 const pageHeight = 297;
-                const lineWidth = 150;
+                const lineWidth = 180;
+                const lineWidthFinal = 180;
                 const startX = (pageWidth - logoWidth) / 2;
                 const startY = 10;
                 const priceMandatory= 2668.31;
@@ -86,7 +87,6 @@ function generarPDF(event,
                 // Array de encabezados
                 const headersArray = [
                     'POP Atelier LLC',
-                    'RFC: PAT170626UH9',
                     'Concept: Quotation',
                     `Date: ${currentDate}`
                     // Agrega aquí todos los encabezados que desees
@@ -177,12 +177,11 @@ function generarPDF(event,
                 doc.text(10, y, kitsHeader);
                 let yIncrement2 = 15; // Incremento en la posición vertical para el contenido
                 y += 5;
-        
-                // Dibujar una línea decorativa
-                const lineWidth2 = 150;
+    
+                
                 doc.setLineWidth(0.2); // Ancho de la línea
                 doc.setDrawColor(0); // Color de la línea (negro)
-                doc.line(10, y, 10 + lineWidth2, y); // Dibujar línea horizontal
+                doc.line(10, y, 10 + lineWidth, y); // Dibujar línea horizontal
                 y += 2; // Incrementar la posición vertical después de la línea
         
                 //LOGIC
@@ -191,6 +190,8 @@ function generarPDF(event,
                 //Contador de lotes
                 let contKits = 0;
                 let contBatch = 0;
+                let kitsprice = 0;
+                let toption = 0;
 
                 for (let i = 1; i < currentBatch; i++) {
                     let storedData = JSON.parse(localStorage.getItem('itemsData' + i));
@@ -216,9 +217,10 @@ function generarPDF(event,
                         doc.setFontSize(10);
                         
                         //doc.text(10, y + 10, `Total Price Kit ${i}: $${totalPricePerBatch.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
-                        doc.text(10, y + 10, `Selection ${i}:`);
+                        doc.text(10, y + 10, `Option ${i}:`);
                         y += 20; // Incrementar la posición vertical para el siguiente lote
                         let totalPricePerBatchFormatted = totalPricePerBatch.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        
                         // Mostrar los elementos del lote con sus precios individuales
                         storedData.forEach(function(item) {
                             let row = [];
@@ -229,40 +231,55 @@ function generarPDF(event,
                                 console.log("UDSAODSADSA");
                                 console.log(totalPricePerBatch , parseInt(item.quantity));
                                 totalPricePerBatchFormatted = totalPricePerBatch * parseInt(item.quantity);
-                                doc.text(10, y + 10, `Total Price Selection ${i}: $${totalPricePerBatchFormatted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                                doc.text(10, y + 10, `Total Items:                 $${totalPricePerBatchFormatted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 contBatch += totalPricePerBatchFormatted;
+                                y+=9
+                                kitsprice = item.quantity * priceMandatory
+                                doc.text(10, y + 10, `Total Price KITS:         $${kitsprice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                                y+=20
+                                toption = kitsprice + totalPricePerBatchFormatted
+                                doc.text(10, y + 10, `Total Option:               $${toption.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 y+=5
+
+                                // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
+                                const hasEnoughSpaceForMandotory2 = y + 20 < pageLimit1; // Cambia 100 según sea necesario
+                            
+                                if (!hasEnoughSpaceForMandotory2) {
+                                    doc.addPage(); // Agregar nueva página si no hay suficiente espacio
+                                    y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                                }
+
                             }else {
                                 // Agregar lógica para obtener la variable sizeWithoutLastSix
                                 var sizeWithoutLastSix = item.size.slice(0, -6); // Esto asume que sizeWithoutLastSix se obtiene de alguna manera
                                 row.push(`Quantity: ${item.quantity}, ${item.type}, ${sizeWithoutLastSix}`);
-                                y+=2
                             }
                            
                             let itemKey = item.size;
                             if (preciosPorSeleccion.hasOwnProperty(itemKey)) {
                                 let pricePerItem = preciosPorSeleccion[itemKey];
                                 let totalForItem = pricePerItem * item.quantity;
-        
+                                //row.push(`          `);
+                                //row.push(`                                                                  `);
                                 row.push(`Price per item: $ ${pricePerItem.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                                 row.push(`Total price per item: $ ${totalForItem.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);                                
                             }
         
                             doc.setFontSize(8); // Reducir tamaño de fuente
-                            doc.text(10, y, row.join(', '));
-                            y += 10; // Incrementar la posición vertical para la siguiente fila
+                            doc.text(10, y, row.join(' '));
+                            y += 5; // Incrementar la posición vertical para la siguiente fila
         
                             if (y >= pageHeight - 10) { // Si alcanza el límite de la página
                                 doc.addPage(); // Agregar una nueva página
                                 y = 10; // Reiniciar la posición en el eje Y para la nueva página
                             }
                         });
-                        
+                        y += 5;
                         
                         // Dibujar una línea decorativa
                         doc.setLineWidth(0.2); // Ancho de la línea
                         doc.setDrawColor(0); // Color de la línea (negro)
-                        doc.line(10, y, 10 + lineWidth2, y); // Dibujar línea horizontal
+                        doc.line(10, y, 10 + lineWidth, y); // Dibujar línea horizontal
             
                         totalAllBatchesPrice += totalPricePerBatch; // Agregar al total de todos los lotes
         
@@ -285,7 +302,7 @@ function generarPDF(event,
                 //doc.text(10, y + 10, `Total Selection's: ${contKits}`);
                 //y+=5
                 doc.text(10, y + 10, `Total Mandatory KITS: ${contKits}`);
-                y+=20
+                y+=30
                 
 
                 let totalFinal = contKits * priceMandatory + contBatch;
@@ -294,17 +311,32 @@ function generarPDF(event,
                 // Dibujar una línea decorativa
                 doc.setLineWidth(0.2); // Ancho de la línea
                 doc.setDrawColor(0); // Color de la línea (negro)
-                doc.line(10, y, 10 + lineWidth2, y); // Dibujar línea horizontal
+                doc.line(10, y, 10 + lineWidthFinal, y); // Dibujar línea horizontal
 
-                doc.text(10, y + 10, `Total Price Mandatory KITS: $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                doc.text(10, y + 10, `Total Price Mandatory KITS:       $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y+= 5;
-                doc.text(10, y + 20, `Total of all KITs: $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                doc.text(10, y + 20, `Total of all KITs:                           $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y += 30; // Incrementar la posición vertical para el siguiente elemento
+                
+                 // Lógica para verificar si hay suficiente espacio en la página actual para "KITS"
+                const hasEnoughSpaceForMandotoryP = y + 50 < pageLimit1; // Cambia 100 según sea necesario
+            
+                if (!hasEnoughSpaceForMandotoryP) {
+                     doc.addPage(); // Agregar nueva página si no hay suficiente espacio
+                     y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                }
+
                 if(contKits > 500){
-                    doc.text(10, y + 10, `Discount: $ ${(totalDiscount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
-                    y+= 10;
-                    doc.text(10, y + 20, `Final Price with discount: $ ${(totalFinalDLF).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                    doc.text(10, y + 10, `Discount:                                     - $ ${(totalDiscount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                    y+= 20;
+                    doc.text(10, y + 20, `Final Price with discount:            $ ${(totalFinalDLF).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                     y+=10;
+                    const hasEnoughSpaceForMandotory2 = y + 20 < pageLimit1; // Cambia 100 según sea necesario
+            
+                    if (!hasEnoughSpaceForMandotory2) {
+                        doc.addPage(); // Agregar nueva página si no hay suficiente espacio
+                        y = 10; // Reiniciar la posición en el eje Y para la nueva página
+                    }
                 }
                 doc.setFontSize(12);
                 doc.setFontStyle('bold');
@@ -322,13 +354,13 @@ function generarPDF(event,
                     console.log("Descuento")
                 }else {
                     doc.setFontSize(12);
-                    doc.text(10, y + 20, `Total Final: $ ${totalFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                    doc.text(10, y + 20, `Total Final:                                    $ ${totalFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 }
-                y += 30; // Incrementar la posición vertical para el siguiente elemento
+                y += 20; // Incrementar la posición vertical para el siguiente elemento
                 // Dibujar una línea decorativa
                 doc.setLineWidth(0.2); // Ancho de la línea
                 doc.setDrawColor(0); // Color de la línea (negro)
-                doc.line(10, y, 10 + lineWidth2, y); // Dibujar línea horizontal
+                doc.line(10, y, 10 + lineWidth, y); // Dibujar línea horizontal
         
                 doc.save('budget-popatelier.pdf');
             };

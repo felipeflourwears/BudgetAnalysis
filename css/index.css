@@ -64,3 +64,43 @@
       .titleh1 {
         letter-spacing: 0.4px; /* Ajusta el valor según tu preferencia */
     }
+
+    .btn-lilac-metallic {
+      background-color: #6a5acd; /* Color lila oscuro */
+      color: #fff; /* Color del texto */
+      border: none; /* Quita el borde */
+      padding: 10px 20px; /* Espaciado interno */
+      font-size: 16px; /* Tamaño de fuente */
+      border-radius: 5px; /* Borde redondeado */
+      position: relative; /* Posición relativa */
+      overflow: hidden; /* Oculta elementos que se salgan del botón */
+      transition: all 0.3s ease; /* Transición suave al pasar el ratón */
+      background: linear-gradient(45deg, rgba(150, 7, 163, 1) 0%, #6a5acd 50%, rgba(150, 7, 163, 1) 100%);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra al botón */
+    }
+    
+    .btn-lilac-metallic:hover {
+      transform: translateY(-2px); /* Efecto de elevación al pasar el ratón */
+      color:#fff;
+    }
+
+    .btn-magenta-dark {
+      background-color: #990099; /* Color magenta oscuro */
+      color: #fff; /* Color del texto */
+      border: none; /* Quita el borde */
+      padding: 10px 20px; /* Espaciado interno */
+      font-size: 16px; /* Tamaño de fuente */
+      border-radius: 5px; /* Borde redondeado */
+      position: relative; /* Posición relativa */
+      overflow: hidden; /* Oculta elementos que se salgan del botón */
+      transition: all 0.3s ease; /* Transición suave al pasar el ratón */
+      box-shadow: 0 4px 8px rgba(153, 0, 153, 0.2); /* Sombra al botón */
+    }
+    
+    .btn-magenta-dark:hover {
+      transform: translateY(-2px); /* Efecto de elevación al pasar el ratón */
+      color: #fff;
+    }
+    
+    
+    

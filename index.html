@@ -38,17 +38,19 @@
         </section>
 
         <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <h1 class="headertext">Smart <span style="margin-left: 5px;">Budget</span></h1>
-                <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0" target="_blank"><img src="./images/pop.png" alt="Logo" class="logo"></a>
+            <div class="container d-flex justify-content-center"> <!-- Añade estas clases para centrar -->
+              <a href="https://www.popatelier.net/" class="navbar-brand mx-auto mx-lg-0" target="_blank">
+                <img src="./images/poptest.png" alt="Logo" class="logo">
+              </a>
             </div>
-        </nav>        
+        </nav>
+                
     
 
-        <br><br> <br><br> <br><br><br><br>
+        <br><br> <br><br> <br><br><br>
 
         <header>
-            <h1 class="titleh1">Budget&nbsp;<i class="bi bi-archive-fill"></i></h1>
+            <h1 class="titleh1">Smart Budget&nbsp;<i class="bi bi-archive-fill"></i></h1>
         </header>
         
         <form action="#" method="POST">
@@ -58,7 +60,7 @@
                         <div class="row">
                             <div class="col-4 col-md-4">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Total Quantity:</label>
+                                    <label class="bmd-label-floating">Smart Display Kit Quantity:</label>
                                     <div class="input-group">
                                         <input type="number" name="cantidad" class="form-control input-number"  style="width: 60px;" value="1" min="1" >
                                     </div>
@@ -68,8 +70,8 @@
                         <br>
                         <div class="row">
                             <div class="col-12">
-                                <button type="button" id="addHeaderBtn" class="btn btn-primary mr-2">Add Header</button>
-                                <button type="button" id="deleteHeaderBtn" class="btn btn-danger">Delete Header</button>
+                                <button type="button" id="addHeaderBtn" class="btn btn-magenta-dark">Add Header</button>
+                                <button type="button" id="deleteHeaderBtn" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                             </div>
                         </div>
 
@@ -90,8 +92,8 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <button type="button" id="addShielfBtn" class="btn btn-primary mr-2">Add Shelf</button>
-                                <button type="button" id="deleteShielfBtn" class="btn btn-danger">Delete Shelf</button>
+                                <button type="button" id="addShielfBtn" class="btn btn-magenta-dark">Add Shelf</button>
+                                <button type="button" id="deleteShielfBtn" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                             </div>
                         </div>
 
@@ -103,7 +105,7 @@
                             <!-- Aquí se agregarán dinámicamente los campos de entrada -->
                         </div>
                         <br>
-                        <button type="button" id="addToListBtn" class="btn btn-primary">Add to list</button>
+                        <button type="button" id="addToListBtn" class="btn btn-lilac-metallic">Add to list</button>
                         <button class="btn btn-generar-pdf btn-success" type="button" id="btn-generar" onclick="generarPDF(event)">Generate PDF</button>
 
                     </div>
@@ -234,7 +236,7 @@
 
 
                         // Crear la cabecera de la tabla
-                        var thead = $('<thead><tr><th colspan="8">SELECTION ' + i + '</th></tr></thead>');
+                        var thead = $('<thead><tr><th colspan="8">OPTION ' + i + '</th></tr></thead>');
                         table.append(thead);
 
                         var thead = $('<thead><tr>' +
