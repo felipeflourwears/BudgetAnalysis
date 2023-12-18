@@ -13,8 +13,8 @@ function generarPDF(event) {
     event.preventDefault();
 
     Swal.fire({
-        title: 'Are you sure to export the PDF?',
-        text: 'You can check your kits in the bottom part of the tables.',
+        title: 'Are you sure you want to export the PDF?',
+        text: 'You can check the order details in the bottom part of the screen.',
         showCancelButton: true,
         confirmButtonText: 'Generate PDF',
         cancelButtonText: 'Cancel'
@@ -107,7 +107,7 @@ function generarPDF(event) {
                 }
 
                // Estilo para "Kit requirements"
-               const kitRequirementsHeader = 'Mandatory KIT:';
+               const kitRequirementsHeader = 'Mandatory items:';
         
                doc.setFontSize(12);
                doc.setFontStyle('bold');
@@ -121,12 +121,12 @@ function generarPDF(event) {
                doc.line(10, y, 10 + lineWidth, y); // Dibujar línea horizontal
                y += 10; // Incrementar la posición vertical después de la línea
         
-               const requerimientosTexto = "- VIDEO PROCESOR + 4G CARD: $ 377.99\n- FREIGTH + IMPORT TAXES: $ 487.20\n- INSTALL: $ 931.02\n- CMS ANUAL FEE: $ 152.10\n- NOC + CELL DATA ANUAL FEE: $ 152.10";
+               const requerimientosTexto = "- Video processor + 4G card: $ 377.99\n- Freight + import taxes: $ 487.20\n- Installation: $ 931.02\n- CMS annual fee: $ 152.10\n- NOC + cell data annual fee: $ 152.10";
                 
                const requerimientosLines = doc.splitTextToSize(requerimientosTexto, 190);
                doc.setFontSize(8);
 
-               const requerimientosTexto2 = "- TOTAL: $ 2,668.31";
+               const requerimientosTexto2 = "- Total: $ 2,668.31";
                addTextAndAdjustY(requerimientosLines, 8);
                doc.setFontSize(10);
                doc.text(10, y, requerimientosTexto2);
@@ -159,7 +159,7 @@ function generarPDF(event) {
                     currency: 'USD'
                 });
 
-                doc.text(10, y + 10, `Mandatory KITS: ${contSK}                                                                ${formattedTKITS}`);
+                doc.text(10, y + 10, `Mandatory items: ${contSK}                                                                ${formattedTKITS}`);
                 y += 15;
                
             
@@ -356,14 +356,14 @@ function generarPDF(event) {
                 doc.setDrawColor(0); // Color de la línea (negro)
                 doc.line(10, y, 10 + lineWidthFinal, y); // Dibujar línea horizontal
 
-                doc.text(10, y + 10, `Total Mandatory KITS:                                         $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                doc.text(10, y + 10, `Total mandatory items:                                         $ ${(contKits * priceMandatory).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y+= 10;
                 
                 y = checkSpaceAndAddPage(doc, y, requiredSpace);
 
                 const hasEnoughSpaceForMandotoryP = y + 70 < pageLimit1; // Cambia 100 según sea necesario
 
-                doc.text(10, y + 20, `Total of all KITs:                                                    $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+                doc.text(10, y + 20, `Total smart display kits:                                       $ ${(contBatch).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
                 y += 15; // Incrementar la posición vertical para el siguiente elemento
             
                 if (!hasEnoughSpaceForMandotoryP) {
